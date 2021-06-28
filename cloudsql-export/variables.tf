@@ -1,45 +1,12 @@
-# Google PubSub variables
-variable "topic_name" {
-  type = string
-}
-
-# Google Cloud Schduler variables
-
-variable "cloud_scheduler_name" {
-  type = string
-}
-
-variable "cloud_scheduler_description" {
-  type    = string
-  default = "CloudSQL export schedule"
-}
-
-variable "cloud_scheduler_schedule" {
-  type = string
-}
-
-# Google Cloud Storage Variables
-
-variable "bucket_name" {
+# Generic variables
+variable "project_id" {
   type        = string
-  description = "Google Cloud Storage Bucket name used to store CloudSQL export"
+  description = "Project ID where this stack should be deployed"
 }
 
-variable "bucket_location" {
+variable "cloud_scheduler_region" {
   type        = string
-  description = "Bucket location. See https://cloud.google.com/storage/docs/locations for list of possible location"
-}
-
-variable "bucket_force_destroy" {
-  type        = bool
-  description = "Force remove all objects inside a bucket when deleting the bucket. "
-  default     = false
-}
-
-variable "bucket_uniform_bucket_level_access" {
-  type        = bool
-  description = "Enable uniform bucket-level access to a bucket"
-  default     = true
+  description = "Region to deploy Cloud Scheduler. This should be the same region with your app engine region"
 }
 
 # Label related variables
@@ -50,54 +17,108 @@ variable "label_environment" {
   default     = "production"
 }
 
+# The following variables will be used to create JSON data for Cloud Scheduler to be sent to Cloud PubSub
+variable "cloudsql_database_names" {
+  type        = string
+  description = "List of databases to be backup"
+}
+
+variable "cloudsql_instance_name" {
+  type        = string
+  description = "Cloud SQL instance name to be backup"
+}
+
+variable "backup_bucket" {
+  type        = string
+  description = "Cloud Storage bucket name to store SQL export"
+}
+
+# Google PubSub variables
+
+variable "topic_name" {
+  type        = string
+  description = "PubSub Topic Name for Cloud Scheduler to post schduler data which will trigger Cloud Function"
+}
+
+# Google Cloud Scheduler variables
+
+variable "cloud_scheduler_name" {
+  type        = string
+  description = "Name of the cloud scheduler used to Schdule Cloud SQL Export"
+}
+
+variable "cloud_scheduler_description" {
+  type        = string
+  description = "Description of the cloud scheduler used to schedule Cloud SQL export."
+}
+
+variable "cloud_scheduler_schedule" {
+  type        = string
+  description = "Schedule of the Cloud SQL export (in crontab format)"
+}
+
+variable "cloud_scheduler_time_zone" {
+  type        = string
+  description = "Time zone of the cloud schduler"
+}
+
 variable "function_bucket_name" {
-  type = string
+  type        = string
+  description = "Cloud Storage Bucket Name to store Cloud Functions source code"
 }
 
 variable "function_source_dir" {
-  type    = string
+  type        = string
+  description = "Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket"
+  default     = "scripts/"
 }
 
 variable "function_archive_name" {
-  type    = string
-  default = "gcf_cloudsql_exporter.zip"
+  type        = string
+  description = "Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment"
+  default     = "cloudsql_exporter.zip"
 }
 
 variable "function_memory_mb" {
-  type    = string
-  default = "128"
+  type        = string
+  description = "Memory (in MB), available to the function. Default value is 128."
+  default     = "128"
 }
 
 variable "function_runtime" {
-  type    = string
-  default = "python38"
-}
-
-variable "function_description" {
-  type    = string
-  default = "scheduled export to cloud storage for cloudsql"
+  type        = string
+  description = "The runtime in which the function is going to run. "
+  default     = "python38"
 }
 
 variable "function_name" {
-  type    = string
-  default = "cloudsql-exporter"
+  type        = string
+  description = "Cloud function name for Cloud SQL data export"
+  default     = "cloudsql-data-export"
 }
 
-variable "region" {
-  type = string
+variable "function_description" {
+  type        = string
+  description = "Cloud function description"
+  default     = "Cloud SQL schduled export to Cloud Storage"
 }
 
-variable "cloud_scheduler_region" {
-  type = string
+variable "function_service_account_name" {
+  type        = string
+  description = "Custom IAM service account name that will be used by Cloud Function."
 }
 
-
-variable "database_name" {
-  type = string
+variable "function_role_id" {
+  type        = string
+  description = "The camel case role id to use for this role. Cannot contain - characters."
 }
 
-variable "cloudsql_instance_name" {}
-variable "backup_bucket" {}
-variable "cloud_schduler_time_zone" {}
+variable "function_role_title" {
+  type        = string
+  description = "A human-readable title for the role."
+}
 
-variable "project_id" {}
+variable "function_role_description" {
+  type        = string
+  description = "A human-readable description for the role."
+}
