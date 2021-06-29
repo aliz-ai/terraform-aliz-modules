@@ -4,7 +4,7 @@ resource "google_storage_bucket" "sql_export" {
   force_destroy = true
 
   uniform_bucket_level_access = true
-  project = local.project_id
+  project                     = local.project_id
 }
 
 resource "google_project_iam_custom_role" "rw_cloudsql_export_bucket" {
@@ -19,9 +19,9 @@ resource "google_project_iam_custom_role" "rw_cloudsql_export_bucket" {
 
 resource "google_storage_bucket_iam_binding" "binding" {
   bucket = google_storage_bucket.sql_export.name
-  role = google_project_iam_custom_role.rw_cloudsql_export_bucket.name
+  role   = google_project_iam_custom_role.rw_cloudsql_export_bucket.name
   members = [
-      "user:sumodirjo@gmail.com",
-      "serviceAccount:${module.mysql-db.instance_service_account_email_address}",
+    "user:sumodirjo@gmail.com",
+    "serviceAccount:${module.mysql-db.instance_service_account_email_address}",
   ]
 }

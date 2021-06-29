@@ -1,4 +1,4 @@
 locals {
-    project_id = "cloudsql-export-tfmodule"
-    region = "asia-southeast1"
+  project_id = "cloudsql-export-tfmodule"
+  region     = "asia-southeast1"
 }
