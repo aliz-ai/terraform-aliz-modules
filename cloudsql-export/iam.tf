@@ -4,6 +4,7 @@ resource "google_service_account" "function_service_account" {
 }
 
 resource "google_project_iam_custom_role" "main" {
+  project     = var.cloudsql_project_id
   role_id     = var.function_role_id
   title       = var.function_role_title
   description = var.function_role_description
@@ -13,7 +14,7 @@ resource "google_project_iam_custom_role" "main" {
 }
 
 resource "google_project_iam_binding" "gcf_role_binding" {
-  project = data.google_project.project.number
+  project = var.cloudsql_project_id
   role    = google_project_iam_custom_role.main.name
 
   members = [

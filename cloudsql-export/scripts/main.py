@@ -23,17 +23,15 @@ def main(event, context):
         "kind": "sql#exportContext",
         "fileType": "SQL",
         "uri": uri,
-        "databases": [
-          pubsub_message['dbs']
-        ]
+        "databases": pubsub_message['dbs']
       }
     }
 
     try:
       request = service.instances().export(
-            project=pubsub_message['project'],
-            instance=pubsub_message['instance'],
-            body=instances_export_request_body
+            project = pubsub_message['project'],
+            instance = pubsub_message['instance'],
+            body = instances_export_request_body
         )
       response = request.execute()
     except HttpError as err:

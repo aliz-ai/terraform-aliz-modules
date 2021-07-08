@@ -28,6 +28,11 @@ variable "cloudsql_instance_name" {
   description = "Cloud SQL instance name to be backup"
 }
 
+variable "cloudsql_project_id" {
+  type        = string
+  description = "Cloud SQL instance project id to be backup"
+}
+
 variable "backup_bucket" {
   type        = string
   description = "Cloud Storage bucket name to store SQL export"
