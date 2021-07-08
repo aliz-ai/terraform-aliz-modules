@@ -1,4 +1,5 @@
 resource "google_storage_bucket" "function_bucket" {
+  project  = var.project_id
   name     = var.function_bucket_name
   location = var.function_bucket_location
 }
@@ -16,6 +17,7 @@ resource "google_storage_bucket_object" "function_archive" {
 }
 
 resource "google_cloudfunctions_function" "main" {
+  project     = var.project_id
   name        = var.function_name
   description = var.function_description
   runtime     = var.function_runtime
