@@ -16,7 +16,7 @@ def main(event, context):
     service = discovery.build('sqladmin', 'v1beta4', http=credentials.authorize(Http()), cache_discovery=False)
 
     datestamp = datetime.now().strftime("%Y%m%d%H%M") # format timestamp: YearMonthDayHourMinute
-    uri = "{0}/backup-{1}-{2}-{3}.gz".format(
+    uri = "gs://{0}/backup-{1}-{2}-{3}.gz".format(
         pubsub_message['gs'],
         pubsub_message['project'],
         pubsub_message['instance'],
