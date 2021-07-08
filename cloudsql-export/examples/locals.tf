@@ -2,8 +2,7 @@ locals {
   cloud_scheduler_schedule = "0 7 * * *"
   cloudsql_service_name    = "hellomysql"
 
-  database_name             = "mysql"
-  # This is mysql (system) database
+  database_name             = "mysql" # This is mysql (system) database
   cloudsql_instance_name    = "hellomysql-d7548fa2"
   backup_bucket             = "gs://cloudsqlexport-lwkfn23flkf2f"
   cloud_scheduler_time_zone = "Asia/Jakarta"
