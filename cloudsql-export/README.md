@@ -63,7 +63,7 @@ No modules.
 | <a name="input_cloud_scheduler_name"></a> [cloud\_scheduler\_name](#input\_cloud\_scheduler\_name) | Name of the cloud scheduler used to Schdule Cloud SQL Export | `string` | n/a | yes |
 | <a name="input_cloud_scheduler_region"></a> [cloud\_scheduler\_region](#input\_cloud\_scheduler\_region) | Region to deploy Cloud Scheduler. This should be the same region with your app engine region | `string` | n/a | yes |
 | <a name="input_cloud_scheduler_schedule"></a> [cloud\_scheduler\_schedule](#input\_cloud\_scheduler\_schedule) | Schedule of the Cloud SQL export (in crontab format) | `string` | n/a | yes |
-| <a name="input_cloud_scheduler_time_zone"></a> [cloud\_scheduler\_time\_zone](#input\_cloud\_scheduler\_time\_zone) | Time zone of the cloud schduler | `string` | n/a | yes |
+| <a name="input_cloud_scheduler_time_zone"></a> [cloud\_scheduler\_time\_zone](#input\_cloud\_scheduler\_time\_zone) | Time zone of the cloud scheduler | `string` | n/a | yes |
 | <a name="input_cloudsql_database_names"></a> [cloudsql\_database\_names](#input\_cloudsql\_database\_names) | List of databases to be backup | `string` | n/a | yes |
 | <a name="input_cloudsql_instance_name"></a> [cloudsql\_instance\_name](#input\_cloudsql\_instance\_name) | Cloud SQL instance name to be backup | `string` | n/a | yes |
 | <a name="input_function_archive_name"></a> [function\_archive\_name](#input\_function\_archive\_name) | Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment | `string` | `"cloudsql_exporter.zip"` | no |
@@ -79,7 +79,7 @@ No modules.
 | <a name="input_function_source_dir"></a> [function\_source\_dir](#input\_function\_source\_dir) | Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket | `string` | `"scripts/"` | no |
 | <a name="input_label_environment"></a> [label\_environment](#input\_label\_environment) | label environment | `string` | `"production"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID where this stack should be deployed | `string` | n/a | yes |
-| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Cloud Scheduler to post schduler data which will trigger Cloud Function | `string` | n/a | yes |
+| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Cloud Scheduler to post scheduler data which will trigger Cloud Function | `string` | n/a | yes |
 
 ## Outputs
 

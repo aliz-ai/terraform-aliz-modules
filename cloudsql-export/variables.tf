@@ -37,7 +37,7 @@ variable "backup_bucket" {
 
 variable "topic_name" {
   type        = string
-  description = "PubSub Topic Name for Cloud Scheduler to post schduler data which will trigger Cloud Function"
+  description = "PubSub Topic Name for Cloud Scheduler to post scheduler data which will trigger Cloud Function"
 }
 
 # Google Cloud Scheduler variables
@@ -59,7 +59,7 @@ variable "cloud_scheduler_schedule" {
 
 variable "cloud_scheduler_time_zone" {
   type        = string
-  description = "Time zone of the cloud schduler"
+  description = "Time zone of the cloud scheduler"
 }
 
 variable "function_bucket_name" {
