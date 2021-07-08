@@ -1,7 +1,8 @@
 resource "google_storage_bucket" "function_bucket" {
-  project  = var.project_id
-  name     = var.function_bucket_name
-  location = var.function_bucket_location
+  project                     = var.project_id
+  name                        = var.function_bucket_name
+  location                    = var.function_bucket_location
+  uniform_bucket_level_access = true
 }
 
 data "archive_file" "function_source" {
