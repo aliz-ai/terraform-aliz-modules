@@ -8,6 +8,7 @@ locals {
 }
 
 resource "google_cloud_scheduler_job" "main" {
+  project     = var.project_id
   region      = var.cloud_scheduler_region
   name        = var.cloud_scheduler_name
   description = var.cloud_scheduler_description
