@@ -7,7 +7,7 @@ resource "google_cloud_scheduler_job" "main" {
 
   pubsub_target {
     topic_name = google_pubsub_topic.cloudsql_export.id
-    data       = base64encode("{\"dbs\":\"${var.database_name}\",\"instance\": \"${var.cloudsql_instance_name}\",\"project\":\"${var.project_id}\", \"gs\":\"gs://${var.backup_bucket}\"}")
+    data       = base64encode("{\"dbs\":\"${var.cloudsql_database_names}\",\"instance\": \"${var.cloudsql_instance_name}\",\"project\":\"${var.project_id}\", \"gs\":\"gs://${var.backup_bucket}\"}")
   }
 
   time_zone = var.cloud_scheduler_time_zone

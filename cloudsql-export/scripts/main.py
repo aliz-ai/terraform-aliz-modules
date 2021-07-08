@@ -24,7 +24,7 @@ def main(event, context):
         "fileType": "SQL",
         "uri": uri,
         "databases": [
-          pubsub_message['db']
+          pubsub_message['dbs']
         ]
       }
     }
