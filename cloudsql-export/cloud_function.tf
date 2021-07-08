@@ -1,6 +1,6 @@
 resource "google_storage_bucket" "function_bucket" {
   name     = var.function_bucket_name
-  location = var.bucket_location
+  location = var.function_bucket_location
 }
 
 data "archive_file" "function_source" {
@@ -11,7 +11,7 @@ data "archive_file" "function_source" {
 
 resource "google_storage_bucket_object" "function_archive" {
   name   = var.function_archive_name
-  bucket = google_storage_bucket.gcf_bucket.name
+  bucket = google_storage_bucket.function_bucket.name
   source = "/tmp/${var.function_archive_name}"
 }
 

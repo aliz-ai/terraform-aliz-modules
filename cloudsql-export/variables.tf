@@ -67,6 +67,11 @@ variable "function_bucket_name" {
   description = "Cloud Storage Bucket Name to store Cloud Functions source code"
 }
 
+variable "function_bucket_location" {
+  type        = string
+  description = "Cloud Storage Bucket location to store Cloud Functions source code"
+}
+
 variable "function_source_dir" {
   type        = string
   description = "Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket"
