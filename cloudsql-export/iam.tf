@@ -1,6 +1,6 @@
 resource "google_service_account" "function_service_account" {
   project      = var.project_id
-  account_id   = var.project_id
+  account_id   = var.function_service_account_id
   display_name = var.function_service_account_name
 }
 

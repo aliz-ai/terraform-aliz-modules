@@ -113,9 +113,15 @@ variable "function_description" {
   default     = "Cloud SQL schduled export to Cloud Storage"
 }
 
+variable "function_service_account_id" {
+  type        = string
+  description = "Service account id that will be used by Cloud Function."
+}
+
 variable "function_service_account_name" {
   type        = string
   description = "Custom IAM service account name that will be used by Cloud Function."
+  default     = ""
 }
 
 variable "function_role_id" {
