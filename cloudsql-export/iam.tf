@@ -12,3 +12,14 @@ resource "google_project_iam_binding" "gcf_role_binding" {
     "serviceAccount:${google_service_account.function_service_account.email}"
   ]
 }
+
+data "google_sql_database_instance" "sql_database_instance" {
+  project = var.cloudsql_project_id
+  name    = var.cloudsql_instance_name
+}
+
+resource "google_storage_bucket_iam_member" "backup_bucket_member" {
+  bucket = var.backup_bucket
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${data.google_sql_database_instance.sql_database_instance.replica_configuration.service_account_email_address}"
+}
