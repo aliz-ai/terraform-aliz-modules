@@ -19,7 +19,7 @@ variable "label_environment" {
 
 # The following variables will be used to create JSON data for Cloud Scheduler to be sent to Cloud PubSub
 variable "cloudsql_database_names" {
-  type        = string
+  type        = list(string)
   description = "List of databases to be backup"
 }
 
