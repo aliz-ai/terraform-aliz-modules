@@ -21,5 +21,5 @@ data "google_sql_database_instance" "sql_database_instance" {
 resource "google_storage_bucket_iam_member" "backup_bucket_member" {
   bucket = var.backup_bucket
   role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${data.google_sql_database_instance.sql_database_instance.replica_configuration.service_account_email_address}"
+  member = "serviceAccount:${data.google_sql_database_instance.sql_database_instance.service_account_email_address}"
 }
