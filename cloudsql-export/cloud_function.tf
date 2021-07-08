@@ -5,14 +5,14 @@ resource "google_storage_bucket" "function_bucket" {
 
 data "archive_file" "function_source" {
   type        = "zip"
-  source_dir  = var.function_source_dir
+  source_dir  = "${path.module}/scripts"
   output_path = "/tmp/${var.function_archive_name}"
 }
 
 resource "google_storage_bucket_object" "function_archive" {
   name   = var.function_archive_name
   bucket = google_storage_bucket.function_bucket.name
-  source = "/tmp/${var.function_archive_name}"
+  source = data.archive_file.function_source.output_path
 }
 
 resource "google_cloudfunctions_function" "main" {
