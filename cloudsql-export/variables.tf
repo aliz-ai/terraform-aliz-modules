@@ -137,4 +137,5 @@ variable "function_role_title" {
 variable "function_role_description" {
   type        = string
   description = "A human-readable description for the role."
+  default     = ""
 }
