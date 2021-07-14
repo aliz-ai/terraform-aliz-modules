@@ -76,7 +76,6 @@ No modules.
 | <a name="input_function_role_title"></a> [function\_role\_title](#input\_function\_role\_title) | A human-readable title for the role. | `string` | n/a | yes |
 | <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | The runtime in which the function is going to run. | `string` | `"python38"` | no |
 | <a name="input_function_service_account_name"></a> [function\_service\_account\_name](#input\_function\_service\_account\_name) | Custom IAM service account name that will be used by Cloud Function. | `string` | n/a | yes |
-| <a name="input_function_source_dir"></a> [function\_source\_dir](#input\_function\_source\_dir) | Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket | `string` | `"scripts/"` | no |
 | <a name="input_label_environment"></a> [label\_environment](#input\_label\_environment) | label environment | `string` | `"production"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID where this stack should be deployed | `string` | n/a | yes |
 | <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Cloud Scheduler to post scheduler data which will trigger Cloud Function | `string` | n/a | yes |

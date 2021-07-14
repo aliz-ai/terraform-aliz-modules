@@ -77,12 +77,6 @@ variable "function_bucket_location" {
   description = "Cloud Storage Bucket location to store Cloud Functions source code"
 }
 
-variable "function_source_dir" {
-  type        = string
-  description = "Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket"
-  default     = "scripts/"
-}
-
 variable "function_archive_name" {
   type        = string
   description = "Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment"

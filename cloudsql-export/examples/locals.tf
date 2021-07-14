@@ -21,6 +21,4 @@ locals {
   cloud_scheduler_region = "asia-southeast1"
   project_id             = "cloudsql-export-tfmodule"
 
-  function_source_dir = "../scripts/"
-
 }

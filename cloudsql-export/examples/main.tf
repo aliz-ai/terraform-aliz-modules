@@ -20,8 +20,6 @@ module "main" {
   region                 = local.bucket_location
   cloud_scheduler_region = "asia-southeast1"
 
-  function_source_dir = "../scripts"
-
   project_id = local.project_id
 
 }
