@@ -124,11 +124,6 @@ variable "function_role_id" {
   description = "The camel case role id to use for this role. Cannot contain - characters."
 }
 
-variable "function_role_title" {
-  type        = string
-  description = "A human-readable title for the role."
-}
-
 variable "function_role_description" {
   type        = string
   description = "A human-readable description for the role."

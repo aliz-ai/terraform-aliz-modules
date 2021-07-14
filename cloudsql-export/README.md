@@ -73,7 +73,6 @@ No modules.
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Cloud function name for Cloud SQL data export | `string` | `"cloudsql-data-export"` | no |
 | <a name="input_function_role_description"></a> [function\_role\_description](#input\_function\_role\_description) | A human-readable description for the role. | `string` | n/a | yes |
 | <a name="input_function_role_id"></a> [function\_role\_id](#input\_function\_role\_id) | The camel case role id to use for this role. Cannot contain - characters. | `string` | n/a | yes |
-| <a name="input_function_role_title"></a> [function\_role\_title](#input\_function\_role\_title) | A human-readable title for the role. | `string` | n/a | yes |
 | <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | The runtime in which the function is going to run. | `string` | `"python38"` | no |
 | <a name="input_function_service_account_name"></a> [function\_service\_account\_name](#input\_function\_service\_account\_name) | Custom IAM service account name that will be used by Cloud Function. | `string` | n/a | yes |
 | <a name="input_label_environment"></a> [label\_environment](#input\_label\_environment) | label environment | `string` | `"production"` | no |
