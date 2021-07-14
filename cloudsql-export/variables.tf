@@ -119,17 +119,6 @@ variable "function_service_account_name" {
   default     = ""
 }
 
-variable "function_role_id" {
-  type        = string
-  description = "The camel case role id to use for this role. Cannot contain - characters."
-}
-
-variable "function_role_description" {
-  type        = string
-  description = "A human-readable description for the role."
-  default     = ""
-}
-
 variable "export_object_suffix" {
   type    = string
   default = ""
