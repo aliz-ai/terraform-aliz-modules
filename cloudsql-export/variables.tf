@@ -133,3 +133,8 @@ variable "function_role_description" {
   description = "A human-readable description for the role."
   default     = ""
 }
+
+variable "export_object_suffix" {
+  type        = string
+  default     = ""
+}
