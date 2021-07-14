@@ -55,6 +55,7 @@ variable "cloud_scheduler_name" {
 variable "cloud_scheduler_description" {
   type        = string
   description = "Description of the cloud scheduler used to schedule Cloud SQL export."
+  default     = ""
 }
 
 variable "cloud_scheduler_schedule" {
@@ -135,6 +136,6 @@ variable "function_role_description" {
 }
 
 variable "export_object_suffix" {
-  type        = string
-  default     = ""
+  type    = string
+  default = ""
 }
