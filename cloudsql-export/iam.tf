@@ -4,13 +4,10 @@ resource "google_service_account" "function_service_account" {
   display_name = var.function_service_account_name
 }
 
-resource "google_project_iam_binding" "gcf_role_binding" {
+resource "google_project_iam_member" "gcf_role_binding" {
   project = var.cloudsql_project_id
   role    = "roles/cloudsql.editor"
-
-  members = [
-    "serviceAccount:${google_service_account.function_service_account.email}"
-  ]
+  member  = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
 data "google_sql_database_instance" "sql_database_instance" {
