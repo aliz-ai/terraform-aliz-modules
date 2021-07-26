@@ -30,7 +30,7 @@ resource "google_monitoring_alert_policy" "all_bgp_sessions_down" {
   display_name = "All BGP Session Down"
 
   documentation {
-    content   = var.all_bgp_sessions_down_documentation_content 
+    content   = var.all_bgp_sessions_down_documentation_content
     mime_type = "text/markdown"
   }
 
@@ -123,7 +123,7 @@ resource "google_monitoring_alert_policy" "bgp_session_down" {
 resource "google_monitoring_alert_policy" "all_vpn_tunnels_down" {
 
   count = var.all_vpn_tunnels_down ? 1 : 0
-  
+
   combiner = "OR"
 
   conditions {
