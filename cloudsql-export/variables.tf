@@ -19,13 +19,18 @@ variable "label_environment" {
 
 # The following variables will be used to create JSON data for Cloud Scheduler to be sent to Cloud PubSub
 variable "cloudsql_database_names" {
-  type        = string
+  type        = list(string)
   description = "List of databases to be backup"
 }
 
 variable "cloudsql_instance_name" {
   type        = string
   description = "Cloud SQL instance name to be backup"
+}
+
+variable "cloudsql_project_id" {
+  type        = string
+  description = "Cloud SQL instance project id to be backup"
 }
 
 variable "backup_bucket" {
@@ -37,7 +42,7 @@ variable "backup_bucket" {
 
 variable "topic_name" {
   type        = string
-  description = "PubSub Topic Name for Cloud Scheduler to post schduler data which will trigger Cloud Function"
+  description = "PubSub Topic Name for Cloud Scheduler to post scheduler data which will trigger Cloud Function"
 }
 
 # Google Cloud Scheduler variables
@@ -50,6 +55,7 @@ variable "cloud_scheduler_name" {
 variable "cloud_scheduler_description" {
   type        = string
   description = "Description of the cloud scheduler used to schedule Cloud SQL export."
+  default     = ""
 }
 
 variable "cloud_scheduler_schedule" {
@@ -59,7 +65,7 @@ variable "cloud_scheduler_schedule" {
 
 variable "cloud_scheduler_time_zone" {
   type        = string
-  description = "Time zone of the cloud schduler"
+  description = "Time zone of the cloud scheduler"
 }
 
 variable "function_bucket_name" {
@@ -67,10 +73,9 @@ variable "function_bucket_name" {
   description = "Cloud Storage Bucket Name to store Cloud Functions source code"
 }
 
-variable "function_source_dir" {
+variable "function_bucket_location" {
   type        = string
-  description = "Local directory where we put cloud function source code. This will be compressed (zipped) before uploaded to Cloud Storage Bucket"
-  default     = "scripts/"
+  description = "Cloud Storage Bucket location to store Cloud Functions source code"
 }
 
 variable "function_archive_name" {
@@ -103,22 +108,18 @@ variable "function_description" {
   default     = "Cloud SQL schduled export to Cloud Storage"
 }
 
+variable "function_service_account_id" {
+  type        = string
+  description = "Service account id that will be used by Cloud Function."
+}
+
 variable "function_service_account_name" {
   type        = string
   description = "Custom IAM service account name that will be used by Cloud Function."
+  default     = ""
 }
 
-variable "function_role_id" {
-  type        = string
-  description = "The camel case role id to use for this role. Cannot contain - characters."
-}
-
-variable "function_role_title" {
-  type        = string
-  description = "A human-readable title for the role."
-}
-
-variable "function_role_description" {
-  type        = string
-  description = "A human-readable description for the role."
+variable "export_object_suffix" {
+  type    = string
+  default = ""
 }

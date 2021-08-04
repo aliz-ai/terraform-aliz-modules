@@ -1,21 +1,24 @@
 resource "google_storage_bucket" "function_bucket" {
-  name     = var.function_bucket_name
-  location = var.bucket_location
+  project                     = var.project_id
+  name                        = var.function_bucket_name
+  location                    = var.function_bucket_location
+  uniform_bucket_level_access = true
 }
 
 data "archive_file" "function_source" {
   type        = "zip"
-  source_dir  = var.function_source_dir
+  source_dir  = "${path.module}/scripts"
   output_path = "/tmp/${var.function_archive_name}"
 }
 
 resource "google_storage_bucket_object" "function_archive" {
   name   = var.function_archive_name
-  bucket = google_storage_bucket.gcf_bucket.name
-  source = "/tmp/${var.function_archive_name}"
+  bucket = google_storage_bucket.function_bucket.name
+  source = data.archive_file.function_source.output_path
 }
 
 resource "google_cloudfunctions_function" "main" {
+  project     = var.project_id
   name        = var.function_name
   description = var.function_description
   runtime     = var.function_runtime
