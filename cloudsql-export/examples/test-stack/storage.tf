@@ -1,6 +1,6 @@
 resource "google_storage_bucket" "sql_export" {
-  name          = "cloudsqlexport-lwkfn23flkf2f"
-  location      = "ASIA-SOUTHEAST1"
+  name          = local.export_bucket_name
+  location      = local.export_bucket_location
   force_destroy = true
 
   uniform_bucket_level_access = true
@@ -21,7 +21,6 @@ resource "google_storage_bucket_iam_binding" "binding" {
   bucket = google_storage_bucket.sql_export.name
   role   = google_project_iam_custom_role.rw_cloudsql_export_bucket.name
   members = [
-    "user:sumodirjo@gmail.com",
     "serviceAccount:${module.mysql-db.instance_service_account_email_address}",
   ]
 }
