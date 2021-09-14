@@ -1,24 +1,25 @@
 locals {
+  region = "europe-west1"
+
   cloud_scheduler_schedule = "0 7 * * *"
-  cloudsql_service_name    = "hellomysql"
 
-  database_name             = "mysql" # This is mysql (system) database
-  cloudsql_instance_name    = "hellomysql-d7548fa2"
-  backup_bucket             = "gs://cloudsqlexport-lwkfn23flkf2f"
-  cloud_scheduler_time_zone = "Asia/Jakarta"
+  cloudsql_database_names   = ["mysql"] # This is mysql (system) database
+  cloudsql_instance_name    = "hellomysql-b3a64273"
+  backup_bucket             = "hellomysql-b3a64273-export"
+  cloud_scheduler_time_zone = "Etc/UTC"
 
-  bucket_name     = "hellomysql-export-bucket"
-  bucket_location = "asia-southeast1"
+  topic_name = "${local.cloudsql_instance_name}-topic"
 
-  topic_name = "hellomysql-export"
+  cloud_scheduler_name = "${local.cloudsql_instance_name}-scheduler"
 
-  cloud_scheduler_name = "hellomysqlscheduler"
+  function_bucket_name     = "${local.cloudsql_instance_name}-function-bucket"
+  function_bucket_location = local.region
 
-  function_bucket_name = "hellomysql-function-bucket"
 
-  region = "asia-southeast1"
+  cloud_scheduler_region = local.region
 
-  cloud_scheduler_region = "asia-southeast1"
-  project_id             = "cloudsql-export-tfmodule"
 
+  project_id                  = "aip-aliz-prod-mp-20210909"
+  cloudsql_project_id         = local.project_id
+  function_service_account_id = local.project_id
 }

@@ -1,26 +1,23 @@
 module "main" {
   source = "../"
 
-  cloud_scheduler_schedule = "0 7 * * *"
+  cloud_scheduler_schedule = local.cloud_scheduler_schedule
 
-  database_name             = local.database_name
+  cloudsql_database_names   = local.cloudsql_database_names
   cloudsql_instance_name    = local.cloudsql_instance_name
   backup_bucket             = local.backup_bucket
   cloud_scheduler_time_zone = local.cloud_scheduler_time_zone
 
-  bucket_name     = local.bucket_name
-  bucket_location = local.bucket_location
+  topic_name = local.topic_name
 
-  topic_name = "hellomysql-export"
-
-  function_bucket_name = local.function_bucket_name
+  function_bucket_name     = local.function_bucket_name
+  function_bucket_location = local.function_bucket_location
 
   cloud_scheduler_name = local.cloud_scheduler_name
 
-  region                 = local.bucket_location
-  cloud_scheduler_region = "asia-southeast1"
+  cloud_scheduler_region = local.cloud_scheduler_region
 
-  project_id = local.project_id
-
+  project_id                  = local.project_id
+  function_service_account_id = local.function_service_account_id
+  cloudsql_project_id         = local.project_id
 }
-

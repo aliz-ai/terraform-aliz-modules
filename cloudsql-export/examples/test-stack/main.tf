@@ -1,11 +1,11 @@
-resource "random_id" "name" {
-  byte_length = 2
+resource "random_id" "suffix" {
+  byte_length = 4
 }
 
 module "mysql-db" {
   source               = "GoogleCloudPlatform/sql-db/google//modules/mysql"
   name                 = local.instance_name
-  random_instance_name = true
+  random_instance_name = false
   database_version     = "MYSQL_8_0"
   project_id           = local.project_id
   zone                 = local.instance_zone

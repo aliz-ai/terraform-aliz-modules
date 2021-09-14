@@ -1,9 +1,13 @@
 locals {
-  instance_name = "hellomysql"
-  project_id = "aip-aliz-prod-mp-20210909"
-  region     = "europe-west4"
-  instance_tier = "db-f1-micro"
-  instance_zone = "europe-west4-a"
-  export_bucket_name = "cloudsqlexport-lwkfn23flkf2f"
-  export_bucket_location = "europe-west4"
+  instance_prefix        = "hellomysql"
+  instance_name          = "${local.instance_prefix}-${random_id.suffix.hex}"
+
+  project_id             = "aip-aliz-prod-mp-20210909"
+  region                 = "europe-west1"
+  
+  instance_tier          = "db-f1-micro"
+  instance_zone          = "europe-west1-b"
+
+  export_bucket_name     = "${local.instance_name}-export"
+  export_bucket_location = local.region
 }
