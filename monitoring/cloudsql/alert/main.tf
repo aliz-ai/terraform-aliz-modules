@@ -75,7 +75,7 @@ resource "google_monitoring_alert_policy" "cloud_sql_memory_utilization" {
   }
 }
 
-resource "google_monitoring_alert_policy" "cloud_sql_memory_utilization" {
+resource "google_monitoring_alert_policy" "cloud_sql_instance_up" {
   project               = var.alert_project_id
   display_name          = "Cloud SQL Instance up in ${var.cloud_sql_project_id}"
   combiner              = "OR"
