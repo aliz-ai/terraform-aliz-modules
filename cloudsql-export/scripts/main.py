@@ -9,32 +9,103 @@ from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 from oauth2client.client import GoogleCredentials
 
+system_databases = [
+    "information_schema", 
+    "performance_schema",
+    "mysql",
+    "sys"
+]
 
-def main(event, context):
+def main(): #event, context):
+
     pubsub_message = json.loads(base64.b64decode(event['data']).decode('utf-8'))
+
+    # For local testing
+    # pubsub_message = {
+    #     'dbs' : [], # [ "sakila" ],
+    #     'instance' : "", # "hellomysql-86084c74",
+    #     'project' : "aip-aliz-prod-mp-20210920-2",
+    #     'gs' : "hellomysql-86084c74-export",
+    #     'suffix' : "export"
+    # }
+
+    project = pubsub_message['project']
+    gs = pubsub_message['gs']
+
     credentials = GoogleCredentials.get_application_default()
 
-    service = discovery.build('sqladmin', 'v1beta4', http=credentials.authorize(Http()), cache_discovery=False)
+    service = discovery.build('sqladmin', 'v1', http=credentials.authorize(Http()), cache_discovery=False)
 
-    uri = get_export_object_uri(pubsub_message['gs'],
-        pubsub_message['project'],
-        pubsub_message['instance'],
-        pubsub_message['suffix']
-    )
+    if pubsub_message['instance'] == "":
+        instances = get_list_of_instances(service, project, pubsub_message)
 
-    instances_export_request_body = {
-        "exportContext": {
-            "kind": "sql#exportContext",
-            "fileType": "SQL",
-            "uri": uri,
-            "databases": pubsub_message['dbs']
+        for instance in instances:
+
+            uri = get_export_object_uri(pubsub_message['gs'],
+                pubsub_message['project'],
+                instance,
+                pubsub_message['suffix']
+            )
+
+            db_list = get_list_of_databases(service, project, instance)
+
+            instances_export_request_body = {
+                "exportContext": {
+                    "kind": "sql#exportContext",
+                    "fileType": "SQL",
+                    "uri": uri,
+                    "databases": db_list
+                }
+            }
+
+            export_dbs(service, project, instance,instances_export_request_body)
+    else:
+        instance = pubsub_message['instance']
+
+        uri = get_export_object_uri(pubsub_message['gs'],
+            pubsub_message['project'],
+            instance,
+            pubsub_message['suffix']
+        )
+
+        if pubsub_message['dbs'] == []:
+            db_list = get_list_of_databases(service, project, instance)
+        else:
+            db_list = pubsub_message['dbs']
+
+        instances_export_request_body = {
+            "exportContext": {
+                "kind": "sql#exportContext",
+                "fileType": "SQL",
+                "uri": uri,
+                "databases": db_list
+            }
         }
-    }
 
+        export_dbs(service, project, instance, instances_export_request_body)
+
+
+def get_list_of_databases(service, project, instance):
+    try:
+        request = service.databases().list(
+            project=project,
+            instance=instance,
+        )
+        response = request.execute()
+        db_list = []
+        for item in response["items"]:
+            if item["name"] not in system_databases:
+                db_list.append(item["name"])
+    except HttpError as err:
+        logging.error("Could not list database. Reason: {}".format(err))
+    else:
+        logging.info("Listing Database: {}".format(db_list))
+
+def export_dbs(service, project, instance, instances_export_request_body):
     try:
         request = service.instances().export(
-            project=pubsub_message['project'],
-            instance=pubsub_message['instance'],
+            project=project,
+            instance=instance,
             body=instances_export_request_body
         )
         response = request.execute()
@@ -53,5 +124,27 @@ def get_export_object_uri(bucket, project, instance, suffix):
         'datetime': now,
         'suffix': suffix
     }
-    uri = "gs://{bucket}/backup-{project}-{instance}-" + ("{suffix}-" if suffix else "") + "{datetime}.gz"
+    uri = "gs://{bucket}/backup/{project}/{instance}/" + ("{suffix}-" if suffix else "") + "{datetime}.gz"
     return uri.format_map(parameters)
+
+def get_list_of_instances(service, project, pubsub_message):
+
+    instance_list = []
+
+    try:
+        request = service.instances().list(
+            project=project
+        )
+        response = request.execute()
+        for item in response["items"]:
+            instance_list.append(item["name"])
+    except HttpError as err:
+        logging.error("Could not list CloudSQL Instances. Reason: {}".format(err))
+    else:
+        logging.info("Listing CloudSQL Instances: {}".format(instance_list))
+
+    return instance_list
+
+
+if __name__ == "__main__":
+    main()

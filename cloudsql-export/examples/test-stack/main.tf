@@ -18,7 +18,7 @@ module "mysql-db" {
     ipv4_enabled        = true
     private_network     = null
     require_ssl         = false
-    authorized_networks = var.authorized_networks
+    authorized_networks = local.authorized_networks
   }
 
 
