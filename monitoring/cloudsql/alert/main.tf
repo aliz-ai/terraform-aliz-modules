@@ -1,6 +1,11 @@
 locals {
-  user_labels_filter = join(" AND ", [for key, value in var.user_labels : "metadata.user_labels.${key} = \"${value}\""])
-  common_filter      = "resource.type = \"cloudsql_database\" AND resource.labels.project_id = \"${var.cloud_sql_project_id}\" AND (${local.user_labels_filter})"
+  user_labels_filter                          = join(" AND ", [for key, value in var.user_labels : "metadata.user_labels.${key} = \"${value}\""])
+  common_filter_parts                         = [
+    "resource.type = \"cloudsql_database\"",
+    "resource.labels.project_id = \"${var.cloud_sql_project_id}\"",
+    length(local.user_labels_filter) > 0 ? "(${local.user_labels_filter})" : ""
+  ]
+  common_filter                               = join(" AND ", compact(local.common_filter_parts))
 }
 
 resource "google_monitoring_alert_policy" "cloud_sql_cpu_utilization" {

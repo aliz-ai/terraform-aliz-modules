@@ -7,7 +7,8 @@ variable "cloud_sql_project_id" {
 }
 
 variable "user_labels" {
-  type = map(string)
+  type    = map(string)
+  default = {}
 }
 
 variable "notification_channels" {
