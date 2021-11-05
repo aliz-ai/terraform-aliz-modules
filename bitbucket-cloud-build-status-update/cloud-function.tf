@@ -67,8 +67,3 @@ resource "google_project_iam_binding" "log-writer" {
     google_logging_project_sink.log-sink.writer_identity,
   ]
 }
-
-#resource "google_service_account" "service_account" {
-#  account_id   = "service-account-id"
-#  display_name = "Service Account"
-#}
