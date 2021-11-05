@@ -25,7 +25,7 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
   source_archive_object = google_storage_bucket_object.cloud-function-archive.name
   entry_point           = "buildStat"
 
-  build_environment_variables = {
+  environment_variables = {
     "USERNAME"  = var.bitbucket_username
     "PASSWORD"  = var.bitbucket_password
     "OWNER"     = var.bitbucket_owner
@@ -51,8 +51,24 @@ resource "google_pubsub_topic" "build-logs" {
 }
 
 resource "google_logging_project_sink" "log-sink" {
-  project = var.project_id
+  project     = var.project_id
   name        = var.logsink_name
   destination = "pubsub.googleapis.com/projects/${var.project_id}/topics/${google_pubsub_topic.build-logs.name}"
   filter      = "resource.type = \"build\" labels.build_step = \"MAIN\" textPayload : (\"starting build\" OR (\"DONE\" OR \"ERROR\")) labels.build_tags : \"trigger\""
+
+  unique_writer_identity = true
 }
+
+resource "google_project_iam_binding" "log-writer" {
+  project = var.project_id
+  role = "roles/pubsub.publisher"
+
+  members = [
+    google_logging_project_sink.log-sink.writer_identity,
+  ]
+}
+
+#resource "google_service_account" "service_account" {
+#  account_id   = "service-account-id"
+#  display_name = "Service Account"
+#}
