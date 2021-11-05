@@ -5,11 +5,6 @@ variable "project_id" {
 }
 
 #Cloud Storage Bucket
-variable "function_bucket_name" {
-  type = string
-  description = "Name of Cloud Storage Bucket where the Cloud Function source code will be stored."
-}
-
 variable "function_bucket_location" {
   type = string
   description = "Cloud Function Bucket location"
