@@ -25,7 +25,7 @@ def buildStat(event, *content):
   }
   buildData = getBuildDesc(eventData)
   logQuery = 'timestamp="%(timeStamp)s" insertId="%(insertId)s"?project="%(projectId)s"' % eventData
-  logURL = 'https://console.cloud.google.com/logs/query;query=' + logQuery.replace('=', '%3D')
+  logURL = 'https://console.cloud.google.com/logs/query;query=' + logQuery.replace('=', '%3D').replace(' ', '%20')
   payload = json.dumps({
     "key": "BUILD",
     "state": getStatus(buildData),
@@ -35,8 +35,8 @@ def buildStat(event, *content):
     'Content-Type': 'application/json'
   }
   bitbucketData = {
-    'owner': os.environ.get['OWNER'],
-    'repo_slug': os.environ.get['REPO'],
+    'owner': os.environ.get('OWNER'),
+    'repo_slug': os.environ.get('REPO'),
     'revision': buildData.source.repo_source.commit_sha
   }
   api_url = ('https://api.bitbucket.org/2.0/repositories/%(owner)s/%(repo_slug)s/commit/%(revision)s/statuses/build' % bitbucketData)
