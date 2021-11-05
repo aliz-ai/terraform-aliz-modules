@@ -1,6 +1,10 @@
+resource "random_id" "storage_bucket" {
+  byte_length = 8
+}
+
 resource "google_storage_bucket" "function_source_bucket" {
   project   = var.project_id
-  name      = var.function_bucket_name
+  name      = "function-source-${randim_id.storage_bucket.hex}"
   location  = var.function_bucket_location
 }
 
