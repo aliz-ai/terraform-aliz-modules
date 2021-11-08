@@ -14,7 +14,7 @@ data "archive_file" "function_source" {
   output_path = "/tmp/${var.function_archive_name}"
 }
 
-resource "google_storage_bucket_object" "cloud-function-archive" {
+resource "google_storage_bucket_object" "cloud_function_archive" {
   name   = var.function_archive_name
   bucket = google_storage_bucket.function_source_bucket.name
   source = data.archive_file.function_source.output_path 
@@ -28,7 +28,7 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
 
   available_memory_mb   = var.function_memory_mb
   source_archive_bucket = google_storage_bucket.function_source_bucket.name
-  source_archive_object = google_storage_bucket_object.cloud-function-archive.name
+  source_archive_object = google_storage_bucket_object.cloud_function_archive.name
   entry_point           = "buildStat"
 
   environment_variables = {
@@ -40,36 +40,36 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
 
   event_trigger {
     event_type  = "google.pubsub.topic.publish"
-    resource    = google_pubsub_topic.build-logs.id
+    resource    = google_pubsub_topic.build_logs.id
     failure_policy {
       retry = false
     }
   }
 
   depends_on = [
-    google_logging_project_sink.log-sink
+    google_logging_project_sink.log_sink
   ]
 }
 
-resource "google_pubsub_topic" "build-logs" {
+resource "google_pubsub_topic" "build_logs" {
   project      = var.project_id
   name         = var.topic_name
 }
 
-resource "google_logging_project_sink" "log-sink" {
+resource "google_logging_project_sink" "log_sink" {
   project     = var.project_id
   name        = var.logsink_name
-  destination = "pubsub.googleapis.com/projects/${var.project_id}/topics/${google_pubsub_topic.build-logs.name}"
+  destination = "pubsub.googleapis.com/projects/${var.project_id}/topics/${google_pubsub_topic.build_logs.name}"
   filter      = "resource.type = \"build\" labels.build_step = \"MAIN\" textPayload : (\"starting build\" OR (\"DONE\" OR \"ERROR\")) labels.build_tags : \"trigger\""
 
   unique_writer_identity = true
 }
 
-resource "google_project_iam_binding" "log-writer" {
+resource "google_project_iam_binding" "log_writer" {
   project = var.project_id
   role = "roles/pubsub.publisher"
 
   members = [
-    google_logging_project_sink.log-sink.writer_identity,
+    google_logging_project_sink.log_sink.writer_identity,
   ]
 }
