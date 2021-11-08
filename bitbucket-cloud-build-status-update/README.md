@@ -41,7 +41,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-
 | [google_logging_project_sink.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
 | [google_cloudfunctions_function.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function) | resource |
 | [google_project_iam_binding.log_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
