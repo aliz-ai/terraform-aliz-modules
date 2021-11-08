@@ -4,7 +4,7 @@ resource "random_id" "storage_bucket" {
 
 resource "google_storage_bucket" "function_source_bucket" {
   project   = var.project_id
-  name      = "function-source-${randim_id.storage_bucket.hex}"
+  name      = "function-source-${random_id.storage_bucket.hex}"
   location  = var.function_bucket_location
 }
 
