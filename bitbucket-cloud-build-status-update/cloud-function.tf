@@ -21,10 +21,12 @@ resource "google_storage_bucket_object" "cloud-function-archive" {
 }
 
 resource "google_cloudfunctions_function" "cloud_build_stat" {
-  project   = var.project_id
-  name      = var.function_name
-  runtime   = var.function_runtime
+  project     = var.project_id
+  name        = var.function_name
+  runtime     = var.function_runtime
+  description = var.function_description
 
+  available_memory_mb   = var.function_memory_mb
   source_archive_bucket = google_storage_bucket.function_source_bucket.name
   source_archive_object = google_storage_bucket_object.cloud-function-archive.name
   entry_point           = "buildStat"
