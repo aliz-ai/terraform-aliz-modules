@@ -7,7 +7,7 @@ variable "project_id" {
 #Cloud Storage Bucket
 variable "function_bucket_location" {
   type = string
-  description = "Cloud Function Bucket location"
+  description = "Cloud Storage Bucket location to store Cloud Function source code."
 }
 
 #PubSub
@@ -25,12 +25,25 @@ variable "logsink_name" {
 variable "function_name" {
   type = string
   description = "Name of the Cloud Function."
+  default = "bitbucket-build-status-update"
+}
+
+variable "function_description" {
+  type = string
+  description = "Description for the function."
+  default = "Cloud build status response to Bitbucket"
 }
 
 variable "function_runtime" {
   type = string
   description = "Runtime in which the function is going to run."
   default = "python39"
+}
+
+variable "function_memory_mb" {
+  type = string
+  description = "Memory (in MB), available to the function. Default value is 128."
+  default = "128"
 }
 
 variable "function_archive_name" {
