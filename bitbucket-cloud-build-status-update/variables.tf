@@ -4,8 +4,7 @@ variable "project_id" {
   description = "The id of the project where this stack will be deployed."
 }
 
-#Cloud Storage Bucket
-variable "function_bucket_location" {
+variable "project_location" {
   type = string
   description = "Cloud Storage Bucket location to store Cloud Function source code."
 }
@@ -14,11 +13,13 @@ variable "function_bucket_location" {
 variable "topic_name" {
   type = string
   description = "PubSub Topic name for Log Sink to post logs which will trigger Cloud Function."
+  default = "bitbucket_build_logs"
 }
 
 variable "logsink_name" {
   type = string
   description = "Name of the Sink posting build logs to PubSub."
+  default = "bitbucket_build_logs"
 }
 
 #Cloud Function
