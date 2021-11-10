@@ -59,15 +59,15 @@ No modules.
 | <a name="input_bitbucket_password"></a> [function\_bitbucket\_password](#input\_function\_bitbucket\_password) | Password of an authorized user to the corresponding Bitbucket project. | `string` | n/a | yes |
 | <a name="input_bitbucket_owner"></a> [function\_bitbucket\_owner](#input\_function\_bitbucket\_owner) | Owner of the corresponding Bitbucket project. | `string` | n/a | yes |
 | <a name="input_bitbucket_repo"></a> [function\_bitbucket\_repo](#input\_function\_bitbucket\_repo) | Name of the reposisoty of the corresponding Bitbucket project. | `string` | n/a | yes |
-| <a name="input_function_bucket_location"></a> [function\_bucket\_location](#input\_function\_bucket\_location) | Cloud Storage Bucket location to store Cloud Function source code. | `string` | n/a | yes |
+| <a name="input_project_location"></a> [project\_location](#input\_project\_location) | Location of the project where this stack should be deployed. | `string` | n/a | yes |
 | <a name="input_function_archive_name"></a> [function\_archive\_name](#input\_function\_archive\_name) | Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment | `string` | `"build-stat-resp.zip"` | no |
 | <a name="input_function_description"></a> [function\_description](#input\_function\_description) | Cloud function description | `string` | `"Cloud build status response to Bitbucket"` | no |
 | <a name="input_function_memory_mb"></a> [function\_memory\_mb](#input\_function\_memory\_mb) | Memory (in MB), available to the function. Default value is 128. | `string` | `"128"` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Cloud function name for Bitbucket build status update | `string` | `"bitbucket-build-status-update"` | no |
 | <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | The runtime in which the function is going to run. | `string` | `"python39"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID where this stack should be deployed | `string` | n/a | yes |
-| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Cloud Scheduler to post scheduler data which will trigger Cloud Function | `string` | n/a | yes |
-| <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Cloud Logging logsink Name to publish logs to the trigger topic. | `string` | n/a | yes |
+| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Logsink to post data which will trigger Cloud Function | `string` | `"bitbucket_build_logs"` | no |
+| <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Cloud Logging logsink Name to publish logs to the trigger topic. | `string` | `"bitbucket_build_logs"` | no |
 
 ## Outputs
 
