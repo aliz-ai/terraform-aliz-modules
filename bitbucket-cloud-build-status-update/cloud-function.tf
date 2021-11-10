@@ -5,7 +5,7 @@ resource "random_id" "storage_bucket" {
 resource "google_storage_bucket" "function_source_bucket" {
   project   = var.project_id
   name      = "function-source-${random_id.storage_bucket.hex}"
-  location  = var.function_bucket_location
+  location  = var.project_location
 }
 
 data "archive_file" "function_source" {
@@ -22,7 +22,8 @@ resource "google_storage_bucket_object" "cloud_function_archive" {
 
 resource "google_cloudfunctions_function" "cloud_build_stat" {
   project     = var.project_id
-  name        = var.function_name
+  region      = var.project_location
+  name        = "${var.function_name}-${random_id.storage_bucket.hex}"
   runtime     = var.function_runtime
   description = var.function_description
 
@@ -52,8 +53,8 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
 }
 
 resource "google_pubsub_topic" "build_logs" {
-  project      = var.project_id
-  name         = var.topic_name
+  project     = var.project_id
+  name        = var.topic_name
 }
 
 resource "google_logging_project_sink" "log_sink" {
@@ -67,7 +68,7 @@ resource "google_logging_project_sink" "log_sink" {
 
 resource "google_project_iam_binding" "log_writer" {
   project = var.project_id
-  role = "roles/pubsub.publisher"
+  role    = "roles/pubsub.publisher"
 
   members = [
     google_logging_project_sink.log_sink.writer_identity,
