@@ -1,5 +1,6 @@
 import json, requests, google.auth, base64, os
 from google.cloud.devtools import cloudbuild_v1
+from google.cloud import secretmanager
 
 def getBuildDesc(eventData):
   credentials, project_id = google.auth.default()
@@ -14,6 +15,13 @@ def getStatus(buildData):
     return "INPROGRESS"
   else:
     return "SUCCESSFUL"
+
+def getSecret(projectId, secretId, versionId):
+  client = secretmanager.SecretManagerServiceClient()
+  name = f"projects/{projectId}/secrets/{secretId}/versions/{versionId}"
+  response = client.access_secret_version(request={"name": name})
+  return response.payload.data.decode("UTF-8")
+
     
 def buildStat(event, *content):
   trigger = json.loads(base64.b64decode(event['data']).decode('utf-8'))
@@ -39,5 +47,6 @@ def buildStat(event, *content):
     'repo_slug': os.environ.get('REPO'),
     'revision': buildData.source.repo_source.commit_sha
   }
+  password = getSecret(eventData['projectId'], os.environ.get('PASSWORD'), 'latest')
   api_url = ('https://api.bitbucket.org/2.0/repositories/%(owner)s/%(repo_slug)s/commit/%(revision)s/statuses/build' % bitbucketData)
-  requests.request("post", api_url, auth=(os.environ.get('USERNAME'), os.environ.get('PASSWORD')), headers=headers, data=payload)
+  requests.request("post", api_url, auth=(os.environ.get('USERNAME'), password), headers=headers, data=payload)
