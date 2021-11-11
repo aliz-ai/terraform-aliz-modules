@@ -1,10 +1,10 @@
-resource "random_id" "storage_bucket" {
+resource "random_id" "id" {
   byte_length = 8
 }
 
 resource "google_storage_bucket" "function_source_bucket" {
   project   = var.project_id
-  name      = "function-source-${random_id.storage_bucket.hex}"
+  name      = "function-source-${random_id.id.hex}"
   location  = var.project_location
 }
 
@@ -23,7 +23,7 @@ resource "google_storage_bucket_object" "cloud_function_archive" {
 resource "google_cloudfunctions_function" "cloud_build_stat" {
   project     = var.project_id
   region      = var.project_location
-  name        = "${var.function_name}-${random_id.storage_bucket.hex}"
+  name        = "${var.function_name}-${random_id.id.hex}"
   runtime     = var.function_runtime
   description = var.function_description
 
@@ -34,7 +34,7 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
 
   environment_variables = {
     "USERNAME"  = var.bitbucket_username
-    "PASSWORD"  = var.bitbucket_password
+    "PASSWORD"  = google_secret_manager_secret.secret.secret_id
     "OWNER"     = var.bitbucket_owner
     "REPO"      = var.bitbucket_repo
   }
@@ -72,5 +72,32 @@ resource "google_project_iam_binding" "log_writer" {
 
   members = [
     google_logging_project_sink.log_sink.writer_identity,
+  ]
+}
+
+resource "google_secret_manager_secret" "secret" {
+  secret_id = "bitbucket-password-${random_id.id.hex}"
+
+  replication {
+    user_managed {
+      replicas {
+        location = var.project_location
+      }
+    }
+  }
+}
+
+resource "google_secret_manager_secret_version" "secret_version" {
+  secret = google_secret_manager_secret.secret.id
+
+  secret_data = var.bitbucket_password
+}
+
+resource "google_secret_manager_secret_iam_binding" "binding" {
+  project = var.project_id
+  secret_id = google_secret_manager_secret.secret.secret_id
+  role = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${var.project_id}@appspot.gserviceaccount.com",
   ]
 }
