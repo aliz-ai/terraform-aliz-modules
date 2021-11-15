@@ -54,16 +54,15 @@ variable "function_archive_name" {
 }
 
 # function environmental variables
-variable "bitbucket_username" {
+variable "bitbucket_key" {
   type = string
-  description = "Bitbucket username with access to the repo."
+  description = "Bitbucket OAuth key"
 }
 
-variable "bitbucket_password" {
+variable "bitbucket_secret" {
   type = string
-  description = "Bitbucket password for user auth."
+  description = "Bitbucket OAuth secret"
 }
-
 variable "bitbucket_owner" {
   type = string
   description = "Bitbucket repo owner for the API."
