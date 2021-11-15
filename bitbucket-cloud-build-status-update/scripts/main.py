@@ -22,7 +22,16 @@ def getSecret(projectId, secretId, versionId):
   response = client.access_secret_version(request={"name": name})
   return response.payload.data.decode("UTF-8")
 
-    
+def getToken(key, secret):
+  headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+  data = "grant_type=client_credentials"
+  authApiUrl = "https://bitbucket.org/site/oauth2/access_token"
+  res = requests.request("post", authApiUrl, auth=(key, secret), headers=headers, data=data)
+  auth = json.loads(res.content.decode('UTF-8'))
+  return auth['access_token']
+
 def buildStat(event, *content):
   trigger = json.loads(base64.b64decode(event['data']).decode('utf-8'))
   eventData = {
@@ -39,14 +48,17 @@ def buildStat(event, *content):
     "state": getStatus(buildData),
     "url": logURL
   })
+  key = getSecret(eventData['projectId'], os.environ.get('KEY'), 'latest')
+  secret = getSecret(eventData['projectId'], os.environ.get('SECRET'), 'latest')
+  token = getToken(key, secret)
   headers = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer %s" % token
   }
   bitbucketData = {
     'owner': os.environ.get('OWNER'),
     'repo_slug': os.environ.get('REPO'),
     'revision': buildData.source.repo_source.commit_sha
   }
-  password = getSecret(eventData['projectId'], os.environ.get('PASSWORD'), 'latest')
   api_url = ('https://api.bitbucket.org/2.0/repositories/%(owner)s/%(repo_slug)s/commit/%(revision)s/statuses/build' % bitbucketData)
-  requests.request("post", api_url, auth=(os.environ.get('USERNAME'), password), headers=headers, data=payload)
+  requests.request("post", api_url, headers=headers, data=payload)
