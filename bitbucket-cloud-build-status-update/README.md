@@ -31,8 +31,8 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random)  | n/a |
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -42,34 +42,38 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [google_logging_project_sink.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
-| [google_cloudfunctions_function.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function) | resource |
-| [google_project_iam_binding.log_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
+| [google_cloudfunctions_function.cloud_build_stat](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function) | resource |
+| [google_logging_project_sink.log_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
+| [google_project_iam_binding.log_writer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
 | [google_pubsub_topic.build_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
-| [google_storage_bucket.function_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
-| [google_storage_bucket_object.function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
+| [google_secret_manager_secret.bitbucket_key](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
+| [google_secret_manager_secret.bitbucket_secret](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
+| [google_secret_manager_secret_iam_binding.key_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_binding) | resource |
+| [google_secret_manager_secret_iam_binding.secret_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_binding) | resource |
+| [google_secret_manager_secret_version.key_version](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
+| [google_secret_manager_secret_version.secret_version](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
+| [google_storage_bucket.function_source_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
+| [google_storage_bucket_object.cloud_function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 | [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [google_secret_manager_secret](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
 | [archive_file.function_source](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
-| [google_project.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bitbucket_key"></a> [function\_bitbucket\_key](#input\_function\_bitbucket\_key) | Bitbucket OAuth key for the workspace. | `string` | n/a | yes |
-| <a name="input_bitbucket_secret"></a> [function\_bitbucket\_secret](#input\_function\_bitbucket\_secret) | Bitbucket OAuth secret for the key. | `string` | n/a | yes |
-| <a name="input_bitbucket_owner"></a> [function\_bitbucket\_owner](#input\_function\_bitbucket\_owner) | Owner of the corresponding Bitbucket project. | `string` | n/a | yes |
-| <a name="input_bitbucket_repo"></a> [function\_bitbucket\_repo](#input\_function\_bitbucket\_repo) | Name of the reposisoty of the corresponding Bitbucket project. | `string` | n/a | yes |
-| <a name="input_project_location"></a> [project\_location](#input\_project\_location) | Location of the project where this stack should be deployed. | `string` | n/a | yes |
+| <a name="input_bitbucket_key"></a> [bitbucket\_key](#input\_bitbucket\_key) | Bitbucket OAuth key | `string` | n/a | yes |
+| <a name="input_bitbucket_owner"></a> [bitbucket\_owner](#input\_bitbucket\_owner) | Bitbucket repo owner for the API. | `string` | n/a | yes |
+| <a name="input_bitbucket_repo"></a> [bitbucket\_repo](#input\_bitbucket\_repo) | Name of the bitbucket repo. | `string` | n/a | yes |
+| <a name="input_bitbucket_secret"></a> [bitbucket\_secret](#input\_bitbucket\_secret) | Bitbucket OAuth secret | `string` | n/a | yes |
 | <a name="input_function_archive_name"></a> [function\_archive\_name](#input\_function\_archive\_name) | Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment | `string` | `"build-stat-resp.zip"` | no |
-| <a name="input_function_description"></a> [function\_description](#input\_function\_description) | Cloud function description | `string` | `"Cloud build status response to Bitbucket"` | no |
+| <a name="input_function_description"></a> [function\_description](#input\_function\_description) | Description for the function. | `string` | `"Cloud build status response to Bitbucket"` | no |
 | <a name="input_function_memory_mb"></a> [function\_memory\_mb](#input\_function\_memory\_mb) | Memory (in MB), available to the function. Default value is 128. | `string` | `"128"` | no |
-| <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Cloud function name for Bitbucket build status update | `string` | `"bitbucket-build-status-update"` | no |
-| <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | The runtime in which the function is going to run. | `string` | `"python39"` | no |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID where this stack should be deployed | `string` | n/a | yes |
-| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic Name for Logsink to post data which will trigger Cloud Function | `string` | `"bitbucket_build_logs"` | no |
-| <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Cloud Logging logsink Name to publish logs to the trigger topic. | `string` | `"bitbucket_build_logs"` | no |
+| <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the Cloud Function. | `string` | `"bitbucket-build-status-update"` | no |
+| <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | Runtime in which the function is going to run. | `string` | `"python39"` | no |
+| <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Name of the Sink posting build logs to PubSub. | `string` | `"bitbucket_build_logs"` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The id of the project where this stack will be deployed. | `string` | n/a | yes |
+| <a name="input_project_location"></a> [project\_location](#input\_project\_location) | Cloud Storage Bucket location to store Cloud Function source code. | `string` | n/a | yes |
+| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic name for Log Sink to post logs which will trigger Cloud Function. | `string` | `"bitbucket_build_logs"` | no |
 
 ## Outputs
 
