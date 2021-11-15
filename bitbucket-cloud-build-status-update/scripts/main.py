@@ -35,18 +35,15 @@ def getToken(key, secret):
 def buildStat(event, *content):
   trigger = json.loads(base64.b64decode(event['data']).decode('utf-8'))
   eventData = {
-    'timeStamp' : trigger['timestamp'],
-    'insertId' : trigger['insertId'],
     'buildId' : trigger['resource']['labels']['build_id'],
     'projectId' : trigger['resource']['labels']['project_id']
   }
   buildData = getBuildDesc(eventData)
-  logQuery = 'timestamp="%(timeStamp)s" insertId="%(insertId)s"?project="%(projectId)s"' % eventData
-  logURL = 'https://console.cloud.google.com/logs/query;query=' + logQuery.replace('=', '%3D').replace(' ', '%20')
+  buildURL = 'https://console.cloud.google.com/cloud-build/builds?project=%(projectId)s' % eventData
   payload = json.dumps({
     "key": "BUILD",
     "state": getStatus(buildData),
-    "url": logURL
+    "url": buildURL
   })
   key = getSecret(eventData['projectId'], os.environ.get('KEY'), 'latest')
   secret = getSecret(eventData['projectId'], os.environ.get('SECRET'), 'latest')
