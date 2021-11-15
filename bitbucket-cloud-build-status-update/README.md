@@ -19,6 +19,7 @@ The following resources should be created and configured properly prior to runni
 * Cloud PubSub : `pubsub.googleapis.com`
 * Cloud Storage : `storage.googleapis.com`
 * Cloud Build API : `cloudbuild.googleapis.com`
+* Secret Manager API : `secretmanager.googleapis.com`
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -47,7 +48,8 @@ No modules.
 | [google_pubsub_topic.build_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
 | [google_storage_bucket.function_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
 | [google_storage_bucket_object.function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
-| [random_id.storage_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [google_secret_manager_secret](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
 | [archive_file.function_source](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [google_project.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
 
@@ -55,8 +57,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bitbucket_username"></a> [function\_bitbucket\_username](#input\_function\_bitbucket\_username) | Username of an authorized user to the corresponding Bitbucket project. | `string` | n/a | yes |
-| <a name="input_bitbucket_password"></a> [function\_bitbucket\_password](#input\_function\_bitbucket\_password) | Password of an authorized user to the corresponding Bitbucket project. | `string` | n/a | yes |
+| <a name="input_bitbucket_key"></a> [function\_bitbucket\_key](#input\_function\_bitbucket\_key) | Bitbucket OAuth key for the workspace. | `string` | n/a | yes |
+| <a name="input_bitbucket_secret"></a> [function\_bitbucket\_secret](#input\_function\_bitbucket\_secret) | Bitbucket OAuth secret for the key. | `string` | n/a | yes |
 | <a name="input_bitbucket_owner"></a> [function\_bitbucket\_owner](#input\_function\_bitbucket\_owner) | Owner of the corresponding Bitbucket project. | `string` | n/a | yes |
 | <a name="input_bitbucket_repo"></a> [function\_bitbucket\_repo](#input\_function\_bitbucket\_repo) | Name of the reposisoty of the corresponding Bitbucket project. | `string` | n/a | yes |
 | <a name="input_project_location"></a> [project\_location](#input\_project\_location) | Location of the project where this stack should be deployed. | `string` | n/a | yes |
