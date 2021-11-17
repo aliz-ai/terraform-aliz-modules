@@ -16,9 +16,9 @@ def getStatus(buildData):
   else:
     return "SUCCESSFUL"
 
-def getSecret(projectId, secretId, versionId):
+def getSecret(secretId):
   client = secretmanager.SecretManagerServiceClient()
-  name = f"projects/{projectId}/secrets/{secretId}/versions/{versionId}"
+  name = f"{secretId}"
   response = client.access_secret_version(request={"name": name})
   return response.payload.data.decode("UTF-8")
 
@@ -45,8 +45,8 @@ def buildStat(event, *content):
     "state": getStatus(buildData),
     "url": buildURL
   })
-  key = getSecret(eventData['projectId'], os.environ.get('KEY'), 'latest')
-  secret = getSecret(eventData['projectId'], os.environ.get('SECRET'), 'latest')
+  key = getSecret(os.environ.get('KEY_ID'))
+  secret = getSecret(os.environ.get('SECRET_ID'))
   token = getToken(key, secret)
   headers = {
     'Content-Type': 'application/json',
