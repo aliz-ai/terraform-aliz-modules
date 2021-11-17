@@ -54,20 +54,36 @@ variable "function_archive_name" {
 }
 
 # function environmental variables
-variable "bitbucket_key" {
+variable "bitbucket_secret_id" {
+  type        = string
+  description = "Bitbucket OAuth secret"
+}
+variable "bitbucket_secret_project_id" {
+  type        = string
+  description = "ID of the project the OAuth secret is stored in."
+}
+variable "bitbucket_secret_version" {
+  type        = string
+  description = "The version of the OAuth secret."
+  default     = "latest"
+}
+variable "bitbucket_key_id" {
   type        = string
   description = "Bitbucket OAuth key"
 }
-
-variable "bitbucket_secret" {
+variable "bitbucket_key_project_id" {
   type        = string
-  description = "Bitbucket OAuth secret"
+  description = "ID of the project the OAuth key is stored in."
+}
+variable "bitbucket_key_version" {
+  type        = string
+  description = "The version of the OAuth key."
+  default     = "latest"
 }
 variable "bitbucket_owner" {
   type        = string
   description = "Bitbucket repo owner for the API."
 }
-
 variable "bitbucket_repo" {
   type        = string
   description = "Name of the bitbucket repo."
