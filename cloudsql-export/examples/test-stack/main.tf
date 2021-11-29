@@ -1,5 +1,5 @@
 resource "random_id" "suffix" {
-  byte_length = 4
+  byte_length = 8
 }
 
 module "mysql-db" {
@@ -18,7 +18,7 @@ module "mysql-db" {
     ipv4_enabled        = true
     private_network     = null
     require_ssl         = false
-    authorized_networks = local.authorized_networks
+    authorized_networks = var.authorized_networks
   }
 
 
@@ -31,4 +31,3 @@ module "mysql-db" {
 
   create_timeout = "30m"
 }
-
