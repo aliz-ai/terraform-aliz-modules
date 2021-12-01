@@ -16,16 +16,16 @@ system_databases = [
     "sys"
 ]
 
-def main(): #event, context):
+def main(event, context):
 
     pubsub_message = json.loads(base64.b64decode(event['data']).decode('utf-8'))
 
     # For local testing
     # pubsub_message = {
     #     'dbs' : [], # [ "sakila" ],
-    #     'instance' : "", # "hellomysql-86084c74",
-    #     'project' : "aip-aliz-prod-mp-20210920-2",
-    #     'gs' : "hellomysql-86084c74-export",
+    #     'instance' : "",
+    #     'project' : "",
+    #     'gs' : "",
     #     'suffix' : "export"
     # }
 
@@ -39,14 +39,16 @@ def main(): #event, context):
     if pubsub_message['instance'] == "":
         instances = get_list_of_instances(service, project, pubsub_message)
 
-        for instance in instances:
+        for item in instances:
 
-            uri = get_export_object_uri(pubsub_message['gs'],
+            instance = item['instance_name']
+            export_bucket = item['export_bucket']
+
+            uri = get_export_object_uri(export_bucket,
                 pubsub_message['project'],
                 instance,
                 pubsub_message['suffix']
             )
-
             db_list = get_list_of_databases(service, project, instance)
 
             instances_export_request_body = {
@@ -129,15 +131,23 @@ def get_export_object_uri(bucket, project, instance, suffix):
 
 def get_list_of_instances(service, project, pubsub_message):
 
+    filter = 'settings.userLabels.backup:enabled'
     instance_list = []
 
     try:
         request = service.instances().list(
-            project=project
+            project=project,
+            filter=filter
         )
         response = request.execute()
-        for item in response["items"]:
-            instance_list.append(item["name"])
+
+        if len(response["items"]) > 0:
+            for item in response["items"]:
+                instance_item = {
+                    "instance_name": item["name"],
+                    "export_bucket": item["settings"]["userLabels"]["backup_bucket"]
+                }
+                instance_list.append(instance_item)
     except HttpError as err:
         logging.error("Could not list CloudSQL Instances. Reason: {}".format(err))
     else:
