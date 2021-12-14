@@ -4,7 +4,7 @@
 
 This terraform module create several resources which will be used to automate the Cloud Build status response to the Bitbucket API.  
   
-Created recourses:
+Created resources:
 * Log sink
 * Pub/Sub topic
 * Cloud Function
