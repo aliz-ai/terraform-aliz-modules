@@ -48,8 +48,8 @@ variable "working_directory" {
   default     = "."
 }
 
-variable "trigger_name_suffix"{
- type = string
+variable "trigger_name_suffix" {
+  type = string
   description = "Additional name suffix for multi-environment infrastructures"
   default = "ops"
 }
