@@ -15,7 +15,7 @@ resource "google_storage_bucket" "gcs-bucket-tf-plans" {
 
 resource "google_cloudbuild_trigger" "tf-plan-trigger" {
   project = var.project
-  name    = "tf-plan-trigger"
+  name    = "tf-plan-trigger-${var.trigger_name_suffix}"
 
   github {
     owner = var.github_owner
@@ -64,7 +64,7 @@ EOT
 
 resource "google_cloudbuild_trigger" "tf-apply-trigger" {
   project = var.project
-  name    = "tf-apply-trigger"
+  name    = "tf-apply-trigger-${var.trigger_name_suffix}"
 
   github {
     owner = var.github_owner
