@@ -3,7 +3,7 @@ resource "random_id" "bucket_suffix" {
 }
 
 resource "google_storage_bucket" "gcs-bucket-tf-plans" {
-  name          = "${var.bucket_name_prefix}-${random_id.bucket_suffix.hex}"
+  name          = "${var.bucket_name_prefix}-${var.trigger_name_suffix}-${random_id.bucket_suffix.hex}"
   location      = var.storage_location
   force_destroy = true
   project       = var.project
