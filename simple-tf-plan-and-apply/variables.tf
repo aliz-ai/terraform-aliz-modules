@@ -47,9 +47,3 @@ variable "working_directory" {
   description = "The path of the root terraform module inside the configured git repository"
   default     = "."
 }
-
-variable "trigger_name_suffix" {
-  type = string
-  description = "Additional name suffix for multi-environment infrastructures"
-  default = "ops"
-}
