@@ -5,7 +5,7 @@ resource "random_id" "id" {
 resource "google_storage_bucket" "function_source_bucket" {
   project  = var.project_id
   name     = "function-source-${random_id.id.hex}"
-  location = var.project_location
+  location = var.region
 }
 
 data "archive_file" "function_source" {
@@ -22,7 +22,7 @@ resource "google_storage_bucket_object" "cloud_function_archive" {
 
 resource "google_cloudfunctions_function" "cloud_build_stat" {
   project     = var.project_id
-  region      = var.project_location
+  region      = var.region
   name        = "${var.function_name}-${random_id.id.hex}"
   runtime     = var.function_runtime
   description = var.function_description
@@ -33,8 +33,8 @@ resource "google_cloudfunctions_function" "cloud_build_stat" {
   entry_point           = "buildStat"
 
   environment_variables = {
-    "KEY_ID"    = data.google_secret_manager_secret_version.bitbucket_key.id
-    "SECRET_ID" = data.google_secret_manager_secret_version.bitbucket_secret.id
+    "KEY_ID"    = var.bitbucket_key_resource_id
+    "SECRET_ID" = var.bitbucket_secret_resource_id
     "OWNER"     = var.bitbucket_owner
     "REPO"      = var.bitbucket_repo
   }
@@ -75,30 +75,18 @@ resource "google_project_iam_binding" "log_writer" {
   ]
 }
 
-data "google_secret_manager_secret_version" "bitbucket_secret" {
-  secret  = var.bitbucket_secret_id
-  project = var.bitbucket_secret_project_id
-  version = var.bitbucket_secret_version
-}
-
 resource "google_secret_manager_secret_iam_binding" "secret_binding" {
-  project   = data.google_secret_manager_secret_version.bitbucket_secret.project
-  secret_id = var.bitbucket_secret_id
+  project   = split("/", var.bitbucket_secret_resource_id)[1]
+  secret_id = split("/", var.bitbucket_secret_resource_id)[3]
   role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${var.project_id}@appspot.gserviceaccount.com",
   ]
 }
 
-data "google_secret_manager_secret_version" "bitbucket_key" {
-  secret  = var.bitbucket_key_id
-  project = var.bitbucket_key_project_id
-  version = var.bitbucket_key_version
-}
-
 resource "google_secret_manager_secret_iam_binding" "key_binding" {
-  project   = data.google_secret_manager_secret_version.bitbucket_key.project
-  secret_id = var.bitbucket_key_id
+  project   = split("/", var.bitbucket_key_resource_id)[1]
+  secret_id = split("/", var.bitbucket_key_resource_id)[3]
   role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${var.project_id}@appspot.gserviceaccount.com",

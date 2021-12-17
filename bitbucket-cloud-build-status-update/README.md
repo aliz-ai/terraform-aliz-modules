@@ -2,7 +2,11 @@
 
 ## Overview
 
-This terraform module create several resources which will be used to automate the Cloud Build status response to the Bitbucket API.  
+The purpose of this module is to let a Bitbucket-based Cloud Build pipeline report build status to Bitbucket. This feature is automatically provided for Github by the Cloud Build Github app, but there's no such feature (at least yet) for Bitbucket.
+
+The solution relies on the logs written by Cloud Build to Cloud Logging to detect certain build events. In case of such an event, a python script running in Cloud Function will check the build on the Cloud Build API and then do the reporting to Bitbucket over its API.
+
+To authenticate the requests to Bitbucket, you need to follow the steps "Client Credentials Grant (4.4)" part from https://developer.atlassian.com/cloud/bitbucket/oauth-2/ to create an OAuth consumer, for example by navigating to https://bitbucket.org/<<YOUR ORG NAME>>/workspace/settings/oauth-consumers/new and then store the available "Key" and "Secret" values in Secret Manager, providing the secret ids to this module. The module will try to grant access to the secrets for the Cloud Functions service account. 
   
 Created resources:
 * Log sink
@@ -60,21 +64,15 @@ No modules.
 | [google_storage_bucket_object.cloud_function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 | [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [archive_file.function_source](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
-| [google_secret_manager_secret_version.bitbucket_key](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/secret_manager_secret_version) | data source |
-| [google_secret_manager_secret_version.bitbucket_secret](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/secret_manager_secret_version) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bitbucket_key_id"></a> [bitbucket\_key\_id](#input\_bitbucket\_key\_id) | Bitbucket OAuth key | `string` | n/a | yes |
-| <a name="input_bitbucket_key_project_id"></a> [bitbucket\_key\_project\_id](#input\_bitbucket\_key\_project\_id) | ID of the project the OAuth key is stored in. | `string` | n/a | yes |
-| <a name="input_bitbucket_key_version"></a> [bitbucket\_key\_version](#input\_bitbucket\_key\_version) | The version of the OAuth key. | `string` | `"latest"` | no |
+| <a name="input_bitbucket_key_resource_id"></a> [bitbucket\_key\_resource\_id](#input\_bitbucket\_key\_resource\_id) | The fully qualified Secret Manager name of the BitBucket OAuth key with version included. | `string` | n/a | yes |
 | <a name="input_bitbucket_owner"></a> [bitbucket\_owner](#input\_bitbucket\_owner) | Bitbucket repo owner for the API. | `string` | n/a | yes |
 | <a name="input_bitbucket_repo"></a> [bitbucket\_repo](#input\_bitbucket\_repo) | Name of the bitbucket repo. | `string` | n/a | yes |
-| <a name="input_bitbucket_secret_id"></a> [bitbucket\_secret\_id](#input\_bitbucket\_secret\_id) | Bitbucket OAuth secret | `string` | n/a | yes |
-| <a name="input_bitbucket_secret_project_id"></a> [bitbucket\_secret\_project\_id](#input\_bitbucket\_secret\_project\_id) | ID of the project the OAuth secret is stored in. | `string` | n/a | yes |
-| <a name="input_bitbucket_secret_version"></a> [bitbucket\_secret\_version](#input\_bitbucket\_secret\_version) | The version of the OAuth secret. | `string` | `"latest"` | no |
+| <a name="input_bitbucket_secret_resource_id"></a> [bitbucket\_secret\_resource\_id](#input\_bitbucket\_secret\_resource\_id) | The fully qualified Secret Manager name of the BitBucket OAuth secret with version included. | `string` | n/a | yes |
 | <a name="input_function_archive_name"></a> [function\_archive\_name](#input\_function\_archive\_name) | Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment | `string` | `"build-stat-resp.zip"` | no |
 | <a name="input_function_description"></a> [function\_description](#input\_function\_description) | Description for the function. | `string` | `"Cloud build status response to Bitbucket"` | no |
 | <a name="input_function_memory_mb"></a> [function\_memory\_mb](#input\_function\_memory\_mb) | Memory (in MB), available to the function. Default value is 128. | `string` | `"128"` | no |
@@ -82,7 +80,7 @@ No modules.
 | <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | Runtime in which the function is going to run. | `string` | `"python39"` | no |
 | <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Name of the Sink posting build logs to PubSub. | `string` | `"bitbucket_build_logs"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The id of the project where this stack will be deployed. | `string` | n/a | yes |
-| <a name="input_project_location"></a> [project\_location](#input\_project\_location) | Cloud Storage Bucket location to store Cloud Function source code. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | The region where to create the Storage Bucket and Cloud Function. | `string` | n/a | yes |
 | <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic name for Log Sink to post logs which will trigger Cloud Function. | `string` | `"bitbucket_build_logs"` | no |
 
 ## Outputs

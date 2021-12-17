@@ -4,9 +4,9 @@ variable "project_id" {
   description = "The id of the project where this stack will be deployed."
 }
 
-variable "project_location" {
+variable "region" {
   type        = string
-  description = "Cloud Storage Bucket location to store Cloud Function source code."
+  description = "The region where to create the Storage Bucket and Cloud Function."
 }
 
 #PubSub
@@ -54,31 +54,13 @@ variable "function_archive_name" {
 }
 
 # function environmental variables
-variable "bitbucket_secret_id" {
+variable "bitbucket_secret_resource_id" {
   type        = string
-  description = "Bitbucket OAuth secret"
+  description = "The fully qualified Secret Manager name of the BitBucket OAuth secret with version included."
 }
-variable "bitbucket_secret_project_id" {
+variable "bitbucket_key_resource_id" {
   type        = string
-  description = "ID of the project the OAuth secret is stored in."
-}
-variable "bitbucket_secret_version" {
-  type        = string
-  description = "The version of the OAuth secret."
-  default     = "latest"
-}
-variable "bitbucket_key_id" {
-  type        = string
-  description = "Bitbucket OAuth key"
-}
-variable "bitbucket_key_project_id" {
-  type        = string
-  description = "ID of the project the OAuth key is stored in."
-}
-variable "bitbucket_key_version" {
-  type        = string
-  description = "The version of the OAuth key."
-  default     = "latest"
+  description = "The fully qualified Secret Manager name of the BitBucket OAuth key with version included."
 }
 variable "bitbucket_owner" {
   type        = string
