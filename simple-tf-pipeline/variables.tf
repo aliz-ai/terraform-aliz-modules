@@ -49,7 +49,7 @@ variable "working_directory" {
 }
 
 variable "trigger_name_suffix" {
-  type = string
+  type        = string
   description = "Additional name suffix for multi-environment infrastructures"
-  default = "ops"
+  default     = "ops"
 }
