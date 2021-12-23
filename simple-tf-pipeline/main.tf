@@ -40,13 +40,13 @@ resource "google_cloudbuild_trigger" "tf-plan-trigger" {
 
   build {
     step {
-      name = "hashicorp/terraform:1.0.2"
+      name = var.terraform_image
       id   = "init"
       dir  = var.working_directory
       args = ["init"]
     }
     step {
-      name = "hashicorp/terraform:1.0.2"
+      name = var.terraform_image
       id   = "plan"
       dir  = var.working_directory
       args = ["plan", "-out", "./$COMMIT_SHA"]
@@ -91,7 +91,7 @@ resource "google_cloudbuild_trigger" "tf-apply-trigger" {
 
   build {
     step {
-      name = "hashicorp/terraform:1.0.2"
+      name = var.terraform_image
       id   = "init"
       dir  = var.working_directory
       args = ["init"]
@@ -112,7 +112,7 @@ EOT
       ]
     }
     step {
-      name = "hashicorp/terraform:1.0.2"
+      name = var.terraform_image
       id   = "apply"
       dir  = var.working_directory
       args = ["apply", "plan"]

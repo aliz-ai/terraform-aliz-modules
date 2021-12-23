@@ -53,3 +53,7 @@ variable "trigger_name_suffix" {
   description = "Additional name suffix for multi-environment infrastructures"
   default     = "ops"
 }
+
+variable "terraform_image" {
+  type = string
+}
