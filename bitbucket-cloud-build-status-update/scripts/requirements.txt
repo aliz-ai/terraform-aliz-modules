@@ -1,0 +1,5 @@
+google-cloud-build==3.7.0
+google-auth
+requests==2.22.0
+google-cloud
+google-cloud-secret-manager
