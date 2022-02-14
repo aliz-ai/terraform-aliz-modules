@@ -42,5 +42,12 @@ variable "function_description" {
 
 variable "google_chat_webhook_url" {
   type        = string
-  description = "Google Chat webhook URL where GKE notifications will be sent."
+  description = "Google Chat webhook URL where GKE notifications will be forwarded."
+  default     = null
+}
+
+variable "slack_webhook_url" {
+  type        = string
+  description = "Slack webhook URL where GKE notifications will be forwarded."
+  default     = null
 }

@@ -40,6 +40,7 @@ resource "google_cloudfunctions_function" "main" {
 
   environment_variables = {
     GOOGLE_CHAT_WEBHOOK_URL = var.google_chat_webhook_url
+    SLACK_WEBHOOK_URL = var.slack_webhook_url
   }
 
 }
