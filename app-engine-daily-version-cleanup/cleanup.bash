@@ -19,7 +19,7 @@ done
 
 for i in ${!myArray[@]}; do
 echo "Service : ${myArray[$i]}"
-    gcloud app versions list --service=${myArray[$i]} --format="value(version.id)" --sort-by="~version.createTime" | tail -n +6 | xargs -r gcloud app versions delete --service=${myArray[$i]} --quiet
+    gcloud app versions list --service=${myArray[$i]} --format="value(version.id)" --sort-by="~version.createTime" | tail -n +11 | xargs -r gcloud app versions delete --service=${myArray[$i]} --quiet
 done
 
 unset myArray

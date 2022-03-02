@@ -38,7 +38,7 @@ resource "google_cloud_scheduler_job" "tf-app-engine-cleanup-scheduler" {
   region      = var.region
   name        = "tf-app-engine-cleanup-scheduler"
   description = "Cloud Scheduler for App Engine version cleanup module"
-  schedule    = "* 6 * * *"
+  schedule    = "0 6 * * *"
 
   retry_config {
     retry_count = 1
