@@ -28,7 +28,7 @@ resource "google_cloudbuild_trigger" "tf-app-engine-clean-up-scheduled" {
     step {
       name       = "gcr.io/cloud-builders/gcloud"
       entrypoint = "bash"
-      args       = ["./cleanup.bash"]
+      args       = ["./.terraform/modules/app-engine-resources.cleanup-test/app-engine-daily-version-cleanup/cleanup.bash"]
     }
   }
 }
