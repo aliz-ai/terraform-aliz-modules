@@ -27,12 +27,12 @@ resource "google_cloudbuild_trigger" "tf-app-engine-clean-up-scheduled" {
   build {
     step{
       name= "gcr.io/cloud-builders/git"
-      args= ["clone", "https://github.com/aliz-ai/terraform-aliz-modules.git?ref=app-engine-daily-version-cleanup"]
+      args= ["clone", "-b app-engine-daily-version-cleanup", "https://github.com/aliz-ai/terraform-aliz-modules.git"]
     }
     step {
       name       = "gcr.io/cloud-builders/gcloud"
       entrypoint = "bash"
-      args = ["ls -la"]
+      args = ["-c","ls -la"]
     }
     step {
       name       = "gcr.io/cloud-builders/gcloud"
