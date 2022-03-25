@@ -78,16 +78,45 @@ resource "google_cloud_run_service" "http_notifier" {
   location = var.location
   name = "http-notifier"
   template {
+    metadata {
+      name = "failed-plan-http-notifier"
+    }
     spec {
       containers {
         image = "us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/http:latest"
         env {
-          name = ""
-          value = ""
+          name = "CONFIG_PATH"
+          value = google_storage_bucket_object.notifier_config.self_link
         }
       }
     }
   }
+}
+
+resource "google_storage_bucket" "notifier_config" {
+  project = var.project
+  location = var.location
+  name = "http-notifier-config-${random_id.resource_suffix.hex}"
+}
+
+resource "google_storage_bucket_object" "notifier_config" {
+  bucket = google_storage_bucket.notifier_config.name
+  name = "http-notifier.yaml"
+  content = <<EOF
+  apiVersion: cloud-build-notifiers/v1
+  kind: HTTPNotifier
+  metadata:
+    name: failed-plan-http-notifier
+  spec:
+    notification:
+      filter: build.status == Build.Status.FAILURE
+      delivery:
+        url: url
+  EOF
+}
+
+resource "random_id" "resource_suffix" {
+  byte = 2
 }
 
 #pubsub topic
@@ -100,7 +129,7 @@ resource "google_pubsub_subscription" "cloud_builds_status" {
   project = var.project
   name = "cloud-builds-status-subscription"
   push_config {
-    push_endpoint = "" #cloudrun url
+    push_endpoint = google_cloud_run_service.http_notifier.url
     oidc_token {
       service_account_email = google_service_account.drift_check_sa.email
     }
