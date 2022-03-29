@@ -89,8 +89,12 @@ resource "google_cloud_run_service" "http_notifier" {
           value = google_storage_bucket_object.notifier_config.self_link
         }
       }
+      service_account_name = google_service_account.drift_check_sa.email
     }
   }
+  depends_on = [
+    google_storage_bucket_object.notifier_config
+  ]
 }
 
 resource "google_storage_bucket" "notifier_config" {
@@ -99,17 +103,23 @@ resource "google_storage_bucket" "notifier_config" {
   name = "http-notifier-config-${random_id.resource_suffix.hex}"
 }
 
+resource "google_storage_bucket_iam_member" "drift_check_sa" {
+  bucket = google_storage_bucket.notifier_config.id
+  role = "roles/storage.objectReader"
+  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
+}
+
 resource "google_storage_bucket_object" "notifier_config" {
   bucket = google_storage_bucket.notifier_config.name
   name = "http-notifier.yaml"
   content = <<EOF
   apiVersion: cloud-build-notifiers/v1
-  kind: HTTPNotifier
+  kind: GoogleChatNotifier
   metadata:
-    name: failed-plan-http-notifier
+    name: failed-plan-googlechat-notifier
   spec:
     notification:
-      filter: build.status == Build.Status.FAILURE
+      filter: ${var.filter}
       delivery:
         url: url
   EOF
