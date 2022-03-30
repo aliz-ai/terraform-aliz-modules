@@ -1,7 +1,7 @@
 #notifier sa
 resource "google_service_account" "drift_check_sa" {
-  project = var.project
-  account_id = "tf-drift-check-sa"
+  project      = var.project
+  account_id   = "tf-drift-check-sa"
   display_name = "tf-drift-check-sa"
 }
 
@@ -9,11 +9,11 @@ resource "google_service_account" "drift_check_sa" {
 resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
-    "roles/run.invoker"
+    "roles/logging.logWriter"
   ])
-  role = each.value
+  role    = each.value
   project = var.project
-  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
+  member  = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
 #cloud scheduler
@@ -22,20 +22,20 @@ data "google_compute_default_service_account" "def_comp_sa" {
 }
 
 resource "google_cloud_scheduler_job" "drift_check_schedule" {
-  name = "drift-check"
+  name        = "drift-check"
   description = "Daily terraform drift-check."
-  project = var.project
-  region = var.region
-  schedule = var.schedule
-  
+  project     = var.project
+  region      = var.region
+  schedule    = var.schedule
+
   retry_config {
     retry_count = 1
   }
 
   http_target {
     http_method = "POST"
-    uri = "https://cloudbuild.googleapis.com/v1/projects/${var.project}/triggers/${google_cloudbuild_trigger.drift_check.name}:run"
-    body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
+    uri         = "https://cloudbuild.googleapis.com/v1/projects/${var.project}/triggers/${google_cloudbuild_trigger.drift_check.name}:run"
+    body        = base64encode("{\"branchName\":\"${var.branch_name}\"}")
     oauth_token {
       service_account_email = data.google_compute_default_service_account.def_comp_sa.email
     }
@@ -44,13 +44,13 @@ resource "google_cloud_scheduler_job" "drift_check_schedule" {
 
 #trigger - drift check
 resource "google_cloudbuild_trigger" "drift_check" {
-  project = var.project
-  name = "terraform-drift-check"
+  project  = var.project
+  name     = "terraform-drift-check"
   disabled = true
 
   github {
     owner = var.repo_owner
-    name = var.repo_name
+    name  = var.repo_name
     push {
       branch = var.branch_name
     }
@@ -58,48 +58,49 @@ resource "google_cloudbuild_trigger" "drift_check" {
 
   build {
     step {
-      name = "hashicorp/terraform:1.1.0"
+      name       = "hashicorp/terraform:1.1.0"
       entrypoint = "sh"
-      dir = var.dir
-      args = [ "-c", "terraform init -no-color"]
+      dir        = var.dir
+      args       = ["-c", "terraform init -no-color"]
     }
     step {
-      name = "hashicorp/terraform:1.1.0"
+      name       = "hashicorp/terraform:1.1.0"
       entrypoint = "sh"
-      dir = var.dir
-      args = [ "-c", "terraform plan -no-color -detailed-exitcode"]
+      dir        = var.dir
+      args       = ["-c", "terraform plan -no-color -detailed-exitcode"]
     }
     timeout = "600s" # default 10 minutes
   }
+  service_account = "projects/${var.project}/serviceAccounts/${google_service_account.drift_check_sa.email}"
 }
 
 # log-based alerting on audit-logs with trigger id filter
 resource "google_logging_metric" "drift_check_metric" {
-  name = "drift-check-tf"
-  filter = "severity=ERROR\nresource.labels.build_trigger_id=483b8b58-c7b4-461d-8002-d535d1aaf3aa"
+  name   = "drift-check-tf"
+  filter = "severity=ERROR\nresource.labels.build_trigger_id=${google_cloudbuild_trigger.drift_check.trigger_id}"
   metric_descriptor {
     metric_kind = "DELTA"
-    value_type = "INT64"
-    unit = "1"
+    value_type  = "INT64"
+    unit        = "1"
   }
 }
 
 resource "google_monitoring_alert_policy" "drift_check_alert" {
-  project = var.project
+  project      = var.project
   display_name = "drift-check-alert-policy"
-  combiner = "OR"
-  enabled = true
+  combiner     = "OR"
+  enabled      = true
   conditions {
     display_name = "drift-check-log-filter"
     condition_threshold {
       aggregations {
-        alignment_period = "60s"
+        alignment_period     = "60s"
         cross_series_reducer = "REDUCE_MAX"
-        per_series_aligner = "ALIGN_MAX"
+        per_series_aligner   = "ALIGN_MAX"
       }
       comparison = "COMPARISON_GT"
-      duration = "0s"
-      filter = "metric.type=\"logging.googleapis.com/user/drift-check-manual\""
+      duration   = "0s"
+      filter     = "metric.type=\"logging.googleapis.com/user/drift-check-manual\""
       trigger {
         percent = 100
       }
