@@ -6,13 +6,14 @@ resource "google_service_account" "drift_check_sa" {
 }
 
 #sa roles (pubsub, cloud run)
-resource "google_service_account_iam_member" "drift_check_sa_roles" {
+resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
     "roles/run.invoker"
   ])
+  role = each.value
   project = var.project
-  member = google_service_account.drift_check_sa.email
+  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
 #cloud scheduler
@@ -34,7 +35,7 @@ resource "google_cloud_scheduler_job" "drift_check_schedule" {
   http_target {
     http_method = "POST"
     uri = "https://cloudbuild.googleapis.com/v1/projects/${var.project}/triggers/${google_cloudbuild_trigger.drift_check.name}:run"
-    body = base64encode({"branchName":"${var.branch_name}"})
+    body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
     oauth_token {
       service_account_email = data.google_compute_default_service_account.def_comp_sa.email
     }
@@ -72,76 +73,40 @@ resource "google_cloudbuild_trigger" "drift_check" {
   }
 }
 
-#cloud run
-resource "google_cloud_run_service" "http_notifier" {
+# log-based alerting on audit-logs with trigger id filter
+resource "google_logging_metric" "drift_check_metric" {
+  name = "drift-check-tf"
+  filter = "severity=ERROR\nresource.labels.build_trigger_id=483b8b58-c7b4-461d-8002-d535d1aaf3aa"
+  metric_descriptor {
+    metric_kind = "DELTA"
+    value_type = "INT64"
+    unit = "1"
+  }
+}
+
+resource "google_monitoring_alert_policy" "drift_check_alert" {
   project = var.project
-  location = var.location
-  name = "http-notifier"
-  template {
-    metadata {
-      name = "failed-plan-http-notifier"
-    }
-    spec {
-      containers {
-        image = "us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/http:latest"
-        env {
-          name = "CONFIG_PATH"
-          value = google_storage_bucket_object.notifier_config.self_link
-        }
+  display_name = "drift-check-alert-policy"
+  combiner = "OR"
+  enabled = true
+  conditions {
+    display_name = "drift-check-log-filter"
+    condition_threshold {
+      aggregations {
+        alignment_period = "60s"
+        cross_series_reducer = "REDUCE_MAX"
+        per_series_aligner = "ALIGN_MAX"
       }
-      service_account_name = google_service_account.drift_check_sa.email
+      comparison = "COMPARISON_GT"
+      duration = "0s"
+      filter = "metric.type=\"logging.googleapis.com/user/drift-check-manual\""
+      trigger {
+        percent = 100
+      }
     }
   }
-  depends_on = [
-    google_storage_bucket_object.notifier_config
-  ]
-}
-
-resource "google_storage_bucket" "notifier_config" {
-  project = var.project
-  location = var.location
-  name = "http-notifier-config-${random_id.resource_suffix.hex}"
-}
-
-resource "google_storage_bucket_iam_member" "drift_check_sa" {
-  bucket = google_storage_bucket.notifier_config.id
-  role = "roles/storage.objectReader"
-  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
-}
-
-resource "google_storage_bucket_object" "notifier_config" {
-  bucket = google_storage_bucket.notifier_config.name
-  name = "http-notifier.yaml"
-  content = <<EOF
-  apiVersion: cloud-build-notifiers/v1
-  kind: GoogleChatNotifier
-  metadata:
-    name: failed-plan-googlechat-notifier
-  spec:
-    notification:
-      filter: ${var.filter}
-      delivery:
-        url: url
-  EOF
-}
-
-resource "random_id" "resource_suffix" {
-  byte = 2
-}
-
-#pubsub topic
-resource "google_pubsub_topic" "cloud_builds_status" {
-  project = var.project
-  name = "cloud-builds-status"
-}
-
-resource "google_pubsub_subscription" "cloud_builds_status" {
-  project = var.project
-  name = "cloud-builds-status-subscription"
-  push_config {
-    push_endpoint = google_cloud_run_service.http_notifier.url
-    oidc_token {
-      service_account_email = google_service_account.drift_check_sa.email
-    }
+  alert_strategy {
+    auto_close = "604800s"
   }
+  #notification_channels = [""]
 }

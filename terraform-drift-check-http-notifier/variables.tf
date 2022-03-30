@@ -38,20 +38,3 @@ variable "dir" {
   description = "Directory, relative to the source root, in which to run the build."
   default = "."
 }
-
-# cloud run variables
-variable "location" {
-  type = string
-  description = "Location of the http-notifier to deploy to."
-}
-
-variable "filter" {
-  type = string
-  description = "The filter to trigger the notifier (written in CEL)."
-  default = "build.status == Build.Status.FAILURE"
-}
-
-variable "notificationUrl" {
-  type = string
-  description = "The URL to send notifications to."
-}
