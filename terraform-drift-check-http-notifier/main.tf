@@ -26,7 +26,7 @@ resource "google_project_iam_member" "drift_check_sa_roles" {
   member  = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
-resource "google_storage_bucket_iam" "tfstate_access" {
+resource "google_storage_bucket_iam_member" "tfstate_access" {
   project = var.project
   bucket  = var.bucket
   role    = "roles/storage.objectAdmin"
