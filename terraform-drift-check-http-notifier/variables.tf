@@ -1,4 +1,4 @@
-# global variables
+# universal variables
 variable "project" {
   type        = string
   description = "ID of the project to deploy the module into."
@@ -7,6 +7,11 @@ variable "project" {
 variable "region" {
   type        = string
   description = "The region of the resources."
+}
+
+variable "tfstate_bucket" {
+  type        = string
+  description = "Name of the tfstate bucket."
 }
 
 # scheduler variables

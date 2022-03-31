@@ -10,13 +10,13 @@ data "google_project" "project" {
 }
 
 data "google_service_account" "default_cloudbuild" {
-  project = var.project
+  project    = var.project
   account_id = "${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
 resource "google_service_account_iam_member" "build_sa_user" {
-  role = "roles/iam.serviceAccountUser"
-  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.drift_check_sa.email}"
   service_account_id = data.google_service_account.default_cloudbuild.id
 }
 
@@ -25,11 +25,17 @@ resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
     "roles/logging.logWriter",
-    "roles/storage.objectAdmin",
     "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.value
   project = var.project
+  member  = "serviceAccount:${google_service_account.drift_check_sa.email}"
+}
+
+resource "google_storage_bucket_iam" "tfstate_access" {
+  project = var.project
+  bucket  = var.bucket
+  role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
@@ -88,7 +94,7 @@ resource "google_cloudbuild_trigger" "drift_check" {
     }
     timeout = "600s" # default 10 minutes
     options {
-      logging = "STACKDRIVER_ONLY"
+      logging              = "STACKDRIVER_ONLY"
       log_streaming_option = "STREAM_ON"
     }
   }
