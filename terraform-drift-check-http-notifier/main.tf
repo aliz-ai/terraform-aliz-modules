@@ -27,9 +27,9 @@ resource "google_project_iam_member" "drift_check_sa_roles" {
 }
 
 resource "google_storage_bucket_iam_member" "tfstate_access" {
-  bucket  = var.tfstate_bucket
-  role    = "roles/storage.objectAdmin"
-  member  = "serviceAccount:${google_service_account.drift_check_sa.email}"
+  bucket = var.tfstate_bucket
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
 #cloud scheduler
@@ -121,7 +121,7 @@ resource "google_monitoring_alert_policy" "drift_check_alert" {
       }
       comparison = "COMPARISON_GT"
       duration   = "0s"
-      filter     = "metric.type=\"logging.googleapis.com/user/${google_logging_metric.drift_check_metric.name}\" resource.type=\"metric\""
+      filter     = "metric.type=\"logging.googleapis.com/user/${google_logging_metric.drift_check_metric.name}\" resource.type=\"build\""
       trigger {
         percent = 100
       }
