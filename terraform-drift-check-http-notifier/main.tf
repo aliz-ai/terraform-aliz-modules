@@ -14,13 +14,7 @@ data "google_service_account" "default_cloudbuild" {
   account_id = "${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_service_account_iam_member" "build_sa_user" {
-  role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${google_service_account.drift_check_sa.email}"
-  service_account_id = data.google_service_account.default_cloudbuild.id
-}
-
-#sa roles (pubsub, cloud run)
+#sa roles
 resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
