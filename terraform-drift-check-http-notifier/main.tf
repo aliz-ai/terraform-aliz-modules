@@ -76,8 +76,9 @@ resource "google_cloudbuild_trigger" "drift_check" {
 
 # log-based alerting on audit-logs with trigger id filter
 resource "google_logging_metric" "drift_check_metric" {
-  name   = "drift-check-tf"
-  filter = "severity=ERROR\nresource.labels.build_trigger_id=${google_cloudbuild_trigger.drift_check.trigger_id}"
+  project = var.project
+  name    = "drift-check-tf"
+  filter  = "severity=ERROR\nresource.labels.build_trigger_id=${google_cloudbuild_trigger.drift_check.trigger_id}"
   metric_descriptor {
     metric_kind = "DELTA"
     value_type  = "INT64"
@@ -100,14 +101,19 @@ resource "google_monitoring_alert_policy" "drift_check_alert" {
       }
       comparison = "COMPARISON_GT"
       duration   = "0s"
-      filter     = "metric.type=\"logging.googleapis.com/user/drift-check-manual\""
+      filter     = "metric.type=\"logging.googleapis.com/user/${google_logging_metric.drift_check_metric.name}\" resource.type=\"metric\""
       trigger {
         percent = 100
       }
     }
   }
+  /*
   alert_strategy {
     auto_close = "604800s"
   }
-  #notification_channels = [""]
+  notification_channels = [""]
+  */
+  depends_on = [
+    google_logging_metric.drift_check_metric
+  ]
 }
