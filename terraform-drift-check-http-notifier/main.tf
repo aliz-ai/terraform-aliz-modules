@@ -5,11 +5,28 @@ resource "google_service_account" "drift_check_sa" {
   display_name = "tf-drift-check-sa"
 }
 
+data "google_project" "project" {
+  project_id = var.project
+}
+
+data "google_service_account" "default_cloudbuild" {
+  project = var.project
+  account_id = "${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "build_sa_user" {
+  role = "roles/iam.serviceAccountUser"
+  member = "serviceAccount:${google_service_account.drift_check_sa.email}"
+  service_account_id = data.google_service_account.default_cloudbuild.id
+}
+
 #sa roles (pubsub, cloud run)
 resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
-    "roles/logging.logWriter"
+    "roles/logging.logWriter",
+    "roles/storage.objectAdmin",
+    "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.value
   project = var.project
@@ -70,8 +87,12 @@ resource "google_cloudbuild_trigger" "drift_check" {
       args       = ["-c", "terraform plan -no-color -detailed-exitcode"]
     }
     timeout = "600s" # default 10 minutes
+    options {
+      logging = "STACKDRIVER_ONLY"
+      log_streaming_option = "STREAM_ON"
+    }
   }
-  service_account = "projects/${var.project}/serviceAccounts/${google_service_account.drift_check_sa.email}"
+  service_account = google_service_account.drift_check_sa.id
 }
 
 # log-based alerting on audit-logs with trigger id filter
