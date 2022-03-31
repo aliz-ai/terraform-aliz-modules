@@ -37,10 +37,13 @@ variable "dir" {
   type        = string
   description = "Directory, relative to the source root, in which to run the build."
   default     = "."
+<<<<<<< HEAD
 }
 
 # cloud run variables
 variable "location" {
   type        = string
   description = "Location of the http-notifier to deploy to."
+=======
+>>>>>>> ac19a398e57f72121678cf10b535d373e5a81eba
 }
