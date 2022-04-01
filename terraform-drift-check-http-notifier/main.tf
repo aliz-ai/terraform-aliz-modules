@@ -106,6 +106,15 @@ resource "google_logging_metric" "drift_check_metric" {
   }
 }
 
+resource "google_monitoring_notification_channel" "user" {
+  project      = var.project
+  display_name = "email notification"
+  type         = "email"
+  labels = {
+    email_address = "barnabas.hegedus@aliz.ai"
+  }
+}
+
 resource "google_monitoring_alert_policy" "drift_check_alert" {
   project      = var.project
   display_name = "drift-check-alert-policy"
@@ -131,8 +140,10 @@ resource "google_monitoring_alert_policy" "drift_check_alert" {
   alert_strategy {
     auto_close = "604800s"
   }
-  notification_channels = [""]
   */
+  notification_channels = [
+    google_monitoring_notification_channel.user.name
+  ]
   depends_on = [
     google_logging_metric.drift_check_metric
   ]
