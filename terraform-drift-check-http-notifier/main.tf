@@ -5,13 +5,16 @@ resource "google_service_account" "drift_check_sa" {
   display_name = "tf-drift-check-sa"
 }
 
-data "google_project" "project" {
-  project_id = var.project
-}
-
-data "google_service_account" "default_cloudbuild" {
-  project    = var.project
-  account_id = "${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+resource "google_project_service" "project" {
+  for_each = toset([
+    "logging.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "monitoring.googleapis.com"
+  ])
+  project            = var.project
+  service            = each.value
+  disable_on_destroy = false
 }
 
 #sa roles
