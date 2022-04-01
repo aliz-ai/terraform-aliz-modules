@@ -1,4 +1,4 @@
-#notifier sa
+# notifier service account
 resource "google_service_account" "drift_check_sa" {
   project      = var.project
   account_id   = "tf-drift-check-sa"
@@ -17,7 +17,7 @@ resource "google_project_service" "project" {
   disable_on_destroy = false
 }
 
-#sa roles
+# service account roles
 resource "google_project_iam_member" "drift_check_sa_roles" {
   for_each = toset([
     #roles
@@ -35,7 +35,7 @@ resource "google_storage_bucket_iam_member" "tfstate_access" {
   member = "serviceAccount:${google_service_account.drift_check_sa.email}"
 }
 
-#cloud scheduler
+# cloud scheduler
 data "google_compute_default_service_account" "def_comp_sa" {
   project = var.project
 }
@@ -61,7 +61,7 @@ resource "google_cloud_scheduler_job" "drift_check_schedule" {
   }
 }
 
-#trigger - drift check
+# trigger - drift check
 resource "google_cloudbuild_trigger" "drift_check" {
   project  = var.project
   name     = "terraform-drift-check"
@@ -139,14 +139,11 @@ resource "google_monitoring_alert_policy" "drift_check_alert" {
       }
     }
   }
-  /*
-  alert_strategy {
-    auto_close = "604800s"
-  }
-  */
+
   notification_channels = [
     google_monitoring_notification_channel.user.name
   ]
+
   depends_on = [
     google_logging_metric.drift_check_metric
   ]
