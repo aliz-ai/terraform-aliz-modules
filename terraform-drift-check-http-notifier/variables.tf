@@ -14,6 +14,11 @@ variable "tfstate_bucket" {
   description = "Name of the tfstate bucket."
 }
 
+variable "notified_email" {
+  type        = string
+  description = "Email of the notified person or group."
+}
+
 # scheduler variables
 variable "schedule" {
   type        = string

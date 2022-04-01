@@ -111,10 +111,10 @@ resource "google_logging_metric" "drift_check_metric" {
 
 resource "google_monitoring_notification_channel" "user" {
   project      = var.project
-  display_name = "email notification"
+  display_name = "Email notification for drift check"
   type         = "email"
   labels = {
-    email_address = "barnabas.hegedus@aliz.ai"
+    email_address = var.notified_email
   }
 }
 
