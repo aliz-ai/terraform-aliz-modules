@@ -26,12 +26,6 @@ variable "schedule" {
   default     = "0 12 * * *"
 }
 
-variable "branch_name" {
-  type        = string
-  description = "The branch to check for drifts."
-  default     = "master"
-}
-
 # trigger variables
 variable "repo_owner" {
   type        = string
@@ -41,6 +35,12 @@ variable "repo_owner" {
 variable "repo_name" {
   type        = string
   description = "Name of the repo to run the trigger on."
+}
+
+variable "branch_name" {
+  type        = string
+  description = "The branch to check for drifts."
+  default     = "master"
 }
 
 variable "dir" {
