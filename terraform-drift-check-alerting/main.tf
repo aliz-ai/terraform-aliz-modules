@@ -6,12 +6,12 @@ resource "google_service_account" "drift_check_sa" {
 }
 
 resource "google_project_service" "project" {
-  for_each = toset([
+  for_each = var.set_apis ? toset([
     "logging.googleapis.com",
     "cloudscheduler.googleapis.com",
     "cloudbuild.googleapis.com",
     "monitoring.googleapis.com"
-  ])
+  ]) : []
   project            = var.project
   service            = each.value
   disable_on_destroy = false

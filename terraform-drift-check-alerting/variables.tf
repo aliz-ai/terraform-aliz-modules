@@ -14,6 +14,12 @@ variable "tfstate_bucket" {
   description = "Name of the tfstate bucket."
 }
 
+variable "set_apis" {
+  type        = bool
+  description = "Let the module turn on the required APIs."
+  default     = false
+}
+
 # notification channel
 variable "notif_project" {
   type        = string

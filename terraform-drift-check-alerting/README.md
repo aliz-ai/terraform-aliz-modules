@@ -69,6 +69,7 @@ No modules.
 | <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of the repo to run the trigger on. | `string` | n/a | yes |
 | <a name="input_repo_owner"></a> [repo\_owner](#input\_repo\_owner) | Owner of the repo to run the trigger on. | `string` | n/a | yes |
 | <a name="input_schedule"></a> [schedule](#input\_schedule) | The schedule to run the drift-check. | `string` | `"0 12 * * *"` | no |
+| <a name="input_set_apis"></a> [set\_apis](#input\_set\_apis) | Let the module turn on the required APIs. | `bool` | `false` | no |
 | <a name="input_tfstate_bucket"></a> [tfstate\_bucket](#input\_tfstate\_bucket) | Name of the tfstate bucket. | `string` | n/a | yes |
 
 ## Outputs
