@@ -42,9 +42,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -54,34 +52,30 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [google_cloudfunctions_function.cloud_build_stat](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function) | resource |
-| [google_logging_project_sink.log_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
-| [google_project_iam_binding.log_writer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
-| [google_pubsub_topic.build_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
-| [google_secret_manager_secret_iam_binding.key_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_binding) | resource |
-| [google_secret_manager_secret_iam_binding.secret_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_binding) | resource |
-| [google_storage_bucket.function_source_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
-| [google_storage_bucket_object.cloud_function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [archive_file.function_source](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [google_cloud_scheduler_job.drift_check_schedule](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_scheduler_job) | resource |
+| [google_cloudbuild_trigger.drift_check](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudbuild_trigger) | resource |
+| [google_logging_metric.drift_check_metric](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_metric) | resource |
+| [google_monitoring_alert_policy.drift_check_alert](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/monitoring_alert_policy) | resource |
+| [google_monitoring_notification_channel.user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/monitoring_notification_channel) | resource |
+| [google_project_iam_member.drift_check_sa_roles](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_service.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+| [google_service_account.drift_check_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
+| [google_storage_bucket_iam_member.tfstate_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
+| [google_compute_default_service_account.def_comp_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_default_service_account) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bitbucket_key_resource_id"></a> [bitbucket\_key\_resource\_id](#input\_bitbucket\_key\_resource\_id) | The fully qualified Secret Manager name of the BitBucket OAuth key with version included. | `string` | n/a | yes |
-| <a name="input_bitbucket_owner"></a> [bitbucket\_owner](#input\_bitbucket\_owner) | Bitbucket repo owner for the API. | `string` | n/a | yes |
-| <a name="input_bitbucket_repo"></a> [bitbucket\_repo](#input\_bitbucket\_repo) | Name of the bitbucket repo. | `string` | n/a | yes |
-| <a name="input_bitbucket_secret_resource_id"></a> [bitbucket\_secret\_resource\_id](#input\_bitbucket\_secret\_resource\_id) | The fully qualified Secret Manager name of the BitBucket OAuth secret with version included. | `string` | n/a | yes |
-| <a name="input_function_archive_name"></a> [function\_archive\_name](#input\_function\_archive\_name) | Cloud function source code archive name. This file is the one that will be uploaded to Cloud Storage Bucket for Cloud Function Deployment | `string` | `"build-stat-resp.zip"` | no |
-| <a name="input_function_description"></a> [function\_description](#input\_function\_description) | Description for the function. | `string` | `"Cloud build status response to Bitbucket"` | no |
-| <a name="input_function_memory_mb"></a> [function\_memory\_mb](#input\_function\_memory\_mb) | Memory (in MB), available to the function. Default value is 128. | `string` | `"128"` | no |
-| <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the Cloud Function. | `string` | `"bitbucket-build-status-update"` | no |
-| <a name="input_function_runtime"></a> [function\_runtime](#input\_function\_runtime) | Runtime in which the function is going to run. | `string` | `"python39"` | no |
-| <a name="input_logsink_name"></a> [logsink\_name](#input\_logsink\_name) | Name of the Sink posting build logs to PubSub. | `string` | `"bitbucket_build_logs"` | no |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The id of the project where this stack will be deployed. | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | The region where to create the Storage Bucket and Cloud Function. | `string` | n/a | yes |
-| <a name="input_topic_name"></a> [topic\_name](#input\_topic\_name) | PubSub Topic name for Log Sink to post logs which will trigger Cloud Function. | `string` | `"bitbucket_build_logs"` | no |
+| <a name="input_branch_name"></a> [branch\_name](#input\_branch\_name) | The branch to check for drifts. | `string` | `"master"` | no |
+| <a name="input_dir"></a> [dir](#input\_dir) | Directory, relative to the source root, in which to run the build. | `string` | `"."` | no |
+| <a name="input_notified_email"></a> [notified\_email](#input\_notified\_email) | Email of the notified person or group. | `string` | n/a | yes |
+| <a name="input_project"></a> [project](#input\_project) | ID of the project to deploy the module into. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | The region of the resources. | `string` | n/a | yes |
+| <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of the repo to run the trigger on. | `string` | n/a | yes |
+| <a name="input_repo_owner"></a> [repo\_owner](#input\_repo\_owner) | Owner of the repo to run the trigger on. | `string` | n/a | yes |
+| <a name="input_schedule"></a> [schedule](#input\_schedule) | The schedule to run the drift-check. | `string` | `"0 12 * * *"` | no |
+| <a name="input_tfstate_bucket"></a> [tfstate\_bucket](#input\_tfstate\_bucket) | Name of the tfstate bucket. | `string` | n/a | yes |
 
 ## Outputs
 
