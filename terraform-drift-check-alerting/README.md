@@ -24,7 +24,10 @@ The following resources should be created and configured properly prior to runni
 
 * Cloud Logging : `logging.googleapis.com`
 * Cloud Build API : `cloudbuild.googleapis.com`
+* Cloud Scheduler : `cloudscheduler.googleapis.com`
+* Cloud Monitoring : `monitoring.googleapis.com`
 
+If the deployer has the required permissions, the module can enable the required APIs.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
