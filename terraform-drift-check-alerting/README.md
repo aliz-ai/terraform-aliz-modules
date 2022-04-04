@@ -4,7 +4,7 @@
 
 The purpose of this module is to check for drifts in a terraform managed GCP environment.
 
-The solution relies on the audit logs written by Cloud Build to Cloud Logging to detect certain build events. The audit log is counted toward an alert policy with a custom logs-based metric. In case of a failed check (detected drift), the alert policy sends an email alert to the provided email adress (single person or group). The pipeline is triggered with a customizable Cloud Scheduler Job.
+The solution relies on the audit logs written by Cloud Build to Cloud Logging to detect certain build events. The audit log is counted toward an alert policy with a custom logs-based metric. In case of a failed check (detected drift), the alert policy sends an email alert to the provided email notification channel. The pipeline is triggered with a customizable Cloud Scheduler Job.
   
 Created resources:
 * Cloud Scheduler Job
