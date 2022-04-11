@@ -14,12 +14,25 @@ variable "tfstate_bucket" {
   description = "Name of the tfstate bucket."
 }
 
-# cloud run
-variable "chat_url" {
+# url secret
+variable "url_secret_project" {
   type        = string
-  description = "The webhook url to the notified google chat space."
+  description = "The project where the secret is stored if different than the default."
+  default     = null
 }
 
+variable "url_secret_name" {
+  type        = string
+  description = "The name of the secret where the webhook url to the notified google chat space is stored."
+}
+
+variable "url_secret_version" {
+  type        = string
+  description = "The version of the secret."
+  default     = "latest"
+}
+
+# cloud run
 variable "image" {
   type        = string
   description = "Fully qualified id of the image from artifact repo."

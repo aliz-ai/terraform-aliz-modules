@@ -56,22 +56,20 @@ resource "google_pubsub_subscription" "notifier" {
 }
 
 # webhook url secret
-resource "google_secret_manager_secret" "webhook_url" {
-  project   = var.project
-  secret_id = "notifier-webhook-url-tf"
-  replication {
-    automatic = true
-  }
+data "google_secret_manager_secret" "webhook_url" {
+  project   = var.url_secret_project != null ? var.url_secret_project : var.project
+  secret_id = var.url_secret_name
 }
 
-resource "google_secret_manager_secret_version" "webhook_url_version" {
-  secret      = google_secret_manager_secret.webhook_url.id
-  secret_data = var.chat_url
+data "google_secret_manager_secret_version" "webhook_url" {
+  project = var.url_secret_project != null ? var.url_secret_project : var.project
+  secret  = var.url_secret_name
+  version = var.url_secret_version
 }
 
 resource "google_secret_manager_secret_iam_member" "webhook_url_access" {
   project   = var.project
-  secret_id = google_secret_manager_secret.webhook_url.secret_id
+  secret_id = data.google_secret_manager_secret.webhook_url.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${data.google_project.default.number}-compute@developer.gserviceaccount.com"
 }
@@ -104,7 +102,7 @@ spec:
         secretRef: webhook-url
   secrets:
   - name: webhook-url
-    value: ${google_secret_manager_secret.webhook_url.id}/versions/latest
+    value: ${data.google_secret_manager_secret_version.webhook_url.name}
   EOF
   depends_on = [
     google_secret_manager_secret_version.webhook_url_version
