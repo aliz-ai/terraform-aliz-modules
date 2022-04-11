@@ -14,6 +14,17 @@ variable "tfstate_bucket" {
   description = "Name of the tfstate bucket."
 }
 
+variable "config_bucket_location" {
+  type        = string
+  description = "The location of the storage bucket to store the notifier config"
+}
+
+variable "filter" {
+  type        = string
+  description = "The filter to be used by the notifier."
+  default     = "build.status == Build.Status.FAILURE && build.build_trigger_id == \"${google_cloudbuild_trigger.drift_check.trigger_id}\""
+}
+
 # url secret
 variable "url_secret_project" {
   type        = string
@@ -69,7 +80,7 @@ variable "dir" {
 }
 
 # cloud run
-
 variable "location" {
-  type = string
+  type        = string
+  description = "The location of service to be depoloyed to."
 }

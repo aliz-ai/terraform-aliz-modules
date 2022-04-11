@@ -5,10 +5,15 @@ resource "google_service_account" "chat_notifier_sa" {
 }
 
 # sa roles [sa user, run invoker]
-resource "google_project_iam_member" "chat_notifier_sa_roles" {
-  project = var.project
-  role    = "roles/run.invoker"
-  member  = "serviceAccount:${google_service_account.chat_notifier_sa.email}"
+resource "google_cloud_run_service_iam_member" "chat_notifier_sa_roles" {
+  location = google_cloud_run_service.chat_notifier.location
+  project  = var.project
+  service  = google_cloud_run_service.chat_notifier.name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.chat_notifier_sa.email}"
+  depends_on = [
+    google_cloud_run_service.chat_notifier
+  ]
 }
 
 resource "google_storage_bucket_iam_member" "tfstate_access" {
@@ -96,7 +101,7 @@ metadata:
   name: example-googlechat-notifier
 spec:
   notification:
-    filter: build.status == Build.Status.FAILURE && build.build_trigger_id == "${google_cloudbuild_trigger.drift_check.trigger_id}"
+    filter: ${var.filter}
     delivery:
       webhookUrl:
         secretRef: webhook-url
