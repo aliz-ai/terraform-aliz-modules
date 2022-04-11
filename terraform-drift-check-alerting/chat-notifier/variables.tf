@@ -14,6 +14,12 @@ variable "tfstate_bucket" {
   description = "Name of the tfstate bucket."
 }
 
+variable "set_apis" {
+  type        = bool
+  description = "Let the module turn on the required APIs."
+  default     = false
+}
+
 variable "config_bucket_location" {
   type        = string
   description = "The location of the storage bucket to store the notifier config"
