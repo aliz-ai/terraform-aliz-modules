@@ -66,8 +66,8 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
 
   secret_environment_variables {
     key        = "WEBHOOK_URL"
-    project_id = var.project
-    secret     = var.webhook_secret
+    project_id = split(var.webhook_secret, "/")[1]
+    secret     = split(var.webhook_secret, "/")[3]
     version    = 1
   }
 
@@ -77,17 +77,10 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
     google_pubsub_topic.iam_change_log_topic
   ]
 }
-/*
-resource "google_cloudfunctions_function_iam_member" "iam_change_log_function_invoker" {
-  project  = var.project
-  role     = "roles/cloudfunctions.invoker"
-  member   = "serviceAccount:${var.infra_service_account}"
-  cloud_function = google_cloudfunctions_function.iam_change_log_function.name
-}
-*/
+
 resource "google_secret_manager_secret_iam_member" "secret_accessor_member" {
-  project   = var.project
-  secret_id = var.webhook_secret
+  project   = split(var.webhook_secret, "/")[1]
+  secret_id = split(var.webhook_secret, "/")[3]
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${var.project}@appspot.gserviceaccount.com"
 }

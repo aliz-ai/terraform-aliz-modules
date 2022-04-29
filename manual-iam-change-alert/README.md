@@ -19,9 +19,8 @@ Created resources:
 
 The following resources should be created and configured properly prior to running this module.
 
-1. Google
+1. Google Chat Space webhook
 2. Secret Manager
-3. Bitbucket OAuth
 
 ### Installation Dependencies
 

@@ -20,5 +20,5 @@ variable "region" {
 
 variable "webhook_secret" {
   type        = string
-  description = "The ID of the secret (not the full resource name) where the webhook is stored."
+  description = "The fully qualified ID of the secret where the webhook is stored."
 }
