@@ -72,7 +72,7 @@ No modules.
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | The organization ID | `string` | n/a | yes |
 | <a name="input_project"></a> [project](#input\_project) | The ID of the project to use. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to be used for the function. | `string` | n/a | yes |
-| <a name="input_webhook_secret"></a> [webhook\_secret](#input\_webhook\_secret) | The ID of the secret (not the full resource name) where the webhook is stored. | `string` | n/a | yes |
+| <a name="input_webhook_secret"></a> [webhook\_secret](#input\_webhook\_secret) | The fully qualified ID of the secret where the webhook is stored. | `string` | n/a | yes |
 
 ## Outputs
 
