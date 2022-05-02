@@ -19,7 +19,7 @@ locals {
   cloud_scheduler_region = local.region
 
 
-  project_id                  = "aip-aliz-prod-mp-20210909"
+  project_id                  = ""
   cloudsql_project_id         = local.project_id
   function_service_account_id = local.project_id
 }
