@@ -4,9 +4,15 @@ variable "project_id" {
   description = "Project ID where this stack should be deployed"
 }
 
+variable "default_region" {
+  type        = string
+  description = "Default region to use with regional resources."
+}
+
 variable "cloud_scheduler_region" {
   type        = string
-  description = "Region to deploy Cloud Scheduler. This should be the same region with your app engine region"
+  description = "Region to deploy Cloud Scheduler. This defaults to `default_region` if not specified"
+  default     = null
 }
 
 # Label related variables
@@ -94,6 +100,12 @@ variable "function_runtime" {
   type        = string
   description = "The runtime in which the function is going to run. "
   default     = "python38"
+}
+
+variable "function_region" {
+  description = "The region to use with the Cloud Function. Defaults to `default_region` if not specified."
+  type        = string
+  default     = null
 }
 
 variable "function_name" {
