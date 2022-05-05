@@ -1,6 +1,6 @@
 
 module "cluster-1" {
-  source              = "../modules/aliz-gke"
+  source              = "../"
   cluster_name        = "cluster-1"
   region              = local.region
   project             = local.project

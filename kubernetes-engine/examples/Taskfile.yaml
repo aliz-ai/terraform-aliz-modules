@@ -1,0 +1,10 @@
+version: '3'
+
+tasks:
+  k9s:
+    desc: k9s
+    cmds:
+      - k9s --context "gke_aliz-infra-sandbox_europe-west1_cluster-1"
+  connect:
+    cmds:
+      - gcloud container clusters get-credentials cluster-1 --region europe-west1 --project aliz-infra-sandbox
