@@ -68,11 +68,11 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_infra_service_account"></a> [infra\_service\_account](#input\_infra\_service\_account) | The service account used by the infra project. | `string` | n/a | yes |
+| <a name="input_infra_service_account"></a> [infra\_service\_account](#input\_infra\_service\_account) | The service account used by the infra project. IAM Changes made by this account will be excluded from the alerts | `string` | n/a | yes |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | The organization ID | `string` | n/a | yes |
 | <a name="input_project"></a> [project](#input\_project) | The ID of the project to use. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to be used for the function. | `string` | n/a | yes |
-| <a name="input_webhook_secret"></a> [webhook\_secret](#input\_webhook\_secret) | The fully qualified ID of the secret where the webhook is stored. | `string` | n/a | yes |
+| <a name="input_webhook_secret"></a> [webhook\_secret](#input\_webhook\_secret) | The fully qualified ID (projects/<number>/secrets/<name>/versions/<version>) of the secret version where the full webhook URL is stored (including the keys). The secret needs to be created manually | `string` | n/a | yes |
 
 ## Outputs
 
