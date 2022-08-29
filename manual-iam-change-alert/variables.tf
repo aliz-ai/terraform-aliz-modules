@@ -5,7 +5,7 @@ variable "org_id" {
 
 variable "infra_service_account" {
   type        = string
-  description = "The service account used by the infra project."
+  description = "The service account used by the infra project. IAM Changes made by this account will be excluded from the alerts"
 }
 
 variable "project" {
@@ -20,5 +20,5 @@ variable "region" {
 
 variable "webhook_secret" {
   type        = string
-  description = "The fully qualified ID of the secret where the webhook is stored."
+  description = "The fully qualified ID (projects/<number>/secrets/<name>/versions/<version>) of the secret version where the full webhook URL is stored (including the keys). The secret needs to be created manually"
 }
