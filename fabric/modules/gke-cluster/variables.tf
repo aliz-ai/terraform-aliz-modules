@@ -328,3 +328,9 @@ variable "auto_provisioning_defaults" {
     service_account   = string
   })
 }
+
+variable "cluster_autoscaling_profile" {
+  desciption = "Autoscaling profile for Cluster Autoscaling. No effect unless cluster_autoscaling.enabled is true. Separate variable to maintain backwards compatibility."
+  default    = "BALANCED"
+  type       = string
+}

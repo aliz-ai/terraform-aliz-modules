@@ -232,6 +232,7 @@ resource "google_container_cluster" "cluster" {
           service_account   = defaults.value.service_account == "" ? null : defaults.value.service_account
         }
       }
+      autoscaling_profile = var.cluster_autoscaling_profile
       // TODO: support GPUs too
     }
   }
