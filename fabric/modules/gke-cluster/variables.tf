@@ -330,7 +330,7 @@ variable "auto_provisioning_defaults" {
 }
 
 variable "cluster_autoscaling_profile" {
-  desciption = "Autoscaling profile for Cluster Autoscaling. No effect unless cluster_autoscaling.enabled is true. Separate variable to maintain backwards compatibility."
-  default    = "BALANCED"
-  type       = string
+  description = "Autoscaling profile for Cluster Autoscaling. No effect unless cluster_autoscaling.enabled is true. Separate variable to maintain backwards compatibility."
+  default     = "BALANCED"
+  type        = string
 }
