@@ -48,18 +48,6 @@ variable "config_timeouts" {
   }
 }
 
-variable "enable_endpoint_independent_mapping" {
-  description = "Enable endpoint independent mapping. Mutually exclusive with enable_dynamic_port_allocation."
-  type        = bool
-  default     = true
-}
-
-variable "enable_dynamic_port_allocation" {
-  description = "Enable dynamic port allocation. Mutually exclusive with enable_endpoint_independent_mapping."
-  type        = bool
-  default     = false
-}
-
 variable "logging_filter" {
   description = "Enables logging if not null, value is one of 'ERRORS_ONLY', 'TRANSLATIONS_ONLY', 'ALL'."
   type        = string
@@ -113,4 +101,16 @@ variable "subnetworks" {
     secondary_ranges     = list(string)
   }))
   default = []
+}
+
+variable "enable_endpoint_independent_mapping" {
+  description = "Enable endpoint independent mapping. Mutually exclusive with enable_dynamic_port_allocation."
+  type        = bool
+  default     = true
+}
+
+variable "enable_dynamic_port_allocation" {
+  description = "Enable dynamic port allocation. Mutually exclusive with enable_endpoint_independent_mapping."
+  type        = bool
+  default     = false
 }
