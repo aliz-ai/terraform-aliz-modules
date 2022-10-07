@@ -74,17 +74,6 @@ variable "cluster_autoscaling" {
   }
 }
 
-variable "auto_provisioning_defaults" {
-  description = "Defaults for Node Auto-Provisioning. No effect unless cluster_autoscaling.enabled is true."
-  default     = null
-  type = object({
-    boot_disk_kms_key = string
-    image_type        = string
-    oauth_scopes      = list(string)
-    service_account   = string
-  })
-}
-
 variable "database_encryption" {
   description = "Enable and configure GKE application-layer secrets encryption."
   type = object({
@@ -327,4 +316,15 @@ variable "workload_identity" {
   description = "Enable the Workload Identity feature."
   type        = bool
   default     = true
+}
+
+variable "auto_provisioning_defaults" {
+  description = "Defaults for Node Auto-Provisioning. No effect unless cluster_autoscaling.enabled is true."
+  default     = null
+  type = object({
+    boot_disk_kms_key = string
+    image_type        = string
+    oauth_scopes      = list(string)
+    service_account   = string
+  })
 }
