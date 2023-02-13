@@ -2,7 +2,7 @@ resource "google_monitoring_uptime_check_config" "https" {
   display_name = "uptime-check ${var.host}"
   timeout      = "10s"
   period       = "60s"
-  project      = var.project
+  project      = var.project_id
 
   http_check {
     use_ssl      = true
@@ -18,13 +18,13 @@ resource "google_monitoring_uptime_check_config" "https" {
   }
 
   content_matchers {
-    content = "aliz.ai"
+    content = var.content_url
   }
 }
 
 resource "google_monitoring_alert_policy" "uptime-check-alert-policy" {
   for_each     = toset(var.duration)
-  project      = var.project
+  project      = var.project_id
   display_name = "uptime-check-alert-policy ${var.host} ${each.value}"
   combiner     = "OR"
   conditions {
