@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "tf-app-engine-clean-up-scheduled" {
       entrypoint = "bash"
       dir        = "terraform-aliz-modules"
       args       = ["-c", 
-      "git checkout app-engine-daily-version-cleanup"]
+      "git checkout ${var.module_branch}"]
     }
     step {
       name       = "gcr.io/cloud-builders/gcloud"

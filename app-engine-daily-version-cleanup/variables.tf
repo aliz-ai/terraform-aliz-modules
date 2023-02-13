@@ -20,3 +20,8 @@ variable "branches_to_apply_regex" {
   type    = string
   default = "master"
 }
+
+variable "module_branch" {
+  type    = string
+  default = "master"
+}
