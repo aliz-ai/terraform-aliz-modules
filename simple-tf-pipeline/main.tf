@@ -16,6 +16,8 @@ resource "google_storage_bucket" "gcs-bucket-tf-plans" {
       type = "Delete"
     }
   }
+
+  uniform_bucket_level_access = true
   # retention_policy {
   #   retention_period = var.plan_retention_days * 24 * 60 * 60
   # }
