@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Crawl the directory tree and get all environment
+
+# Store the list of files in a variable
+get_file_list() {
+    IFS=$'\n' file_list=($(find ./project-factory -name main.tf | grep -v modules | sed 's/main.tf//g'))
+}
+
+crawl_dir() {
+    get_file_list
+    pwd=$(pwd)
+    for i in "${file_list[@]}"; do
+        cd $i
+        echo $i
+        terraform init
+        terraform plan -out plan -detailed-exitcode
+        if [ $? -eq 1 ]; then
+            echo "Terraform plan failed for $i"
+            exit 1
+        fi
+        terraform show -json plan > plan.json
+        rm plan
+        cd $pwd
+    done
+}
+crawl_dir
