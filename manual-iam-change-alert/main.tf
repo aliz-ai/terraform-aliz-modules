@@ -48,7 +48,7 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
   region      = var.region
   name        = "iam-change-notifier-function"
   description = "Function to trigger when IAM changes occur"
-  runtime     = "nodejs16"
+  runtime     = "nodejs20"
 
   available_memory_mb   = 128
   max_instances         = 1
