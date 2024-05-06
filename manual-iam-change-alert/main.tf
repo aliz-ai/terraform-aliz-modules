@@ -48,7 +48,7 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
   region      = var.region
   name        = "iam-change-notifier-function"
   description = "Function to trigger when IAM changes occur"
-  runtime     = "nodejs8"
+  runtime     = "nodejs20"
 
   available_memory_mb   = 128
   max_instances         = 1
@@ -59,9 +59,6 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
   event_trigger {
     event_type = "google.pubsub.topic.publish"
     resource   = google_pubsub_topic.iam_change_log_topic.name
-    failure_policy {
-      retry = false
-    }
   }
 
   secret_environment_variables {
@@ -69,6 +66,12 @@ resource "google_cloudfunctions_function" "iam_change_log_function" {
     project_id = split("/", var.webhook_secret)[1]
     secret     = split("/", var.webhook_secret)[3]
     version    = split("/", var.webhook_secret)[5]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      secret_environment_variables[0].project_id,
+    ]
   }
 
   depends_on = [
