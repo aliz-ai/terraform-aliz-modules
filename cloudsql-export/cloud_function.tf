@@ -19,6 +19,7 @@ resource "google_storage_bucket_object" "function_archive" {
 
 resource "google_cloudfunctions_function" "main" {
   project     = var.project_id
+  region      = coalesce(var.function_region, var.default_region)
   name        = var.function_name
   description = var.function_description
   runtime     = var.function_runtime

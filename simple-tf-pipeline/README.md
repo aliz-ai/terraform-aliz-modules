@@ -52,8 +52,9 @@ No modules.
 | <a name="input_plan_retention_days"></a> [plan\_retention\_days](#input\_plan\_retention\_days) | The number of days terraform plan files are kept in GCS | `number` | `30` | no |
 | <a name="input_project"></a> [project](#input\_project) | n/a | `string` | n/a | yes |
 | <a name="input_storage_location"></a> [storage\_location](#input\_storage\_location) | n/a | `string` | `"EU"` | no |
+| <a name="input_terraform_image"></a> [terraform\_image](#input\_terraform\_image) | n/a | `string` | n/a | yes |
+| <a name="input_trigger_name_suffix"></a> [trigger\_name\_suffix](#input\_trigger\_name\_suffix) | Additional name suffix for multi-environment infrastructures | `string` | `"ops"` | no |
 | <a name="input_working_directory"></a> [working\_directory](#input\_working\_directory) | The path of the root terraform module inside the configured git repository | `string` | `"."` | no |
-| <a name="trigger_name_suffix"></a> [trigger\_name\_suffix](#input\_trigger\_name\_suffix) | Trigger name suffix for multi-project infrastructures | `string` | "ops" | no |
 
 ## Outputs
 
