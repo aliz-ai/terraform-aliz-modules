@@ -1,9 +1,9 @@
 locals {
   pubsub_data = {
     dbs : var.cloudsql_database_names,
-    instance : var.cloudsql_instance_name
+    instance : var.cloudsql_instance_name,
     project : var.cloudsql_project_id,
-    gs : var.backup_bucket
+    gs : var.backup_bucket,
     suffix : var.export_object_suffix
   }
 }
